@@ -5,13 +5,15 @@
 % Model-View-Controller pattern will be used.
 % Why I name the labels and titles in Chinese? 
 % Because this software is for Chinese students.
-
 function scagui()
 %% Initialization
 close all;
 
+
+
 %% Figure
-fig_top = figure('Name','SCA Master', 'MenuBar','None', 'NumberTitle','off', 'Position',[100 200 1280 720]);
+fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 200 1280 720]);
+% fig_top.MenuBar = 'None';
 
 %% Menu
 menu_file = uimenu(fig_top,'Label','文件');
@@ -29,8 +31,31 @@ menu_data_align = uimenu(menu_data, 'Label','对齐');
 menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 
 %% Panel
-panel_curve = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'BackgroundColor','white','Position',[0.3 0.3 0.7 0.7]);
+panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
 panel_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
 
-end
+%% Axes
+% axes_plot = axes('Parent',fig_top,'Position',[0.3 0.3 0.7 0.7]);
+% axes_plot = axes('Parent',panel_plot);
+% x = -pi:0.1:pi;
+% y = plot(x,sin(x),'Parent',axes_curve);
+% axes_plot.Visible = 'off';
 
+%% Plot
+
+tabgroup_plot = uitabgroup(panel_plot);
+tab1 = uitab(tabgroup_plot,'Title','原始');
+tab2 = uitab(tabgroup_plot,'Title','低通');
+tab3 = uitab(tabgroup_plot,'Title','对齐');
+
+axes_plot1 = axes(tab1);
+axes_plot2 = axes(tab2);
+axes_plot3 = axes(tab3);
+
+x = -pi:0.1:pi;
+plot(x,sin(x),'Parent',axes_plot1);
+plot(x,cos(x),'Parent',axes_plot2);
+plot(x,tan(x),'Parent',axes_plot3);
+
+
+end
