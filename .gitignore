@@ -3,6 +3,7 @@
 *.trs
 *.zip
 *.rar
+*.pdf
 
 /traces/*
 
