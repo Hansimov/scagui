@@ -13,7 +13,7 @@ close all;
 
 %% Figure
 fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 200 1280 720]);
-% fig_top.MenuBar = 'None';
+fig_top.MenuBar = 'None';
 
 %% Menu
 menu_file = uimenu(fig_top,'Label','нд╪Ч');
