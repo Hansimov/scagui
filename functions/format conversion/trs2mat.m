@@ -39,13 +39,18 @@ function trs_info = trs2mat(trs_file)
     sample_type   = sample_coding(4);
     sample_size   = bin2dec(arr2str(sample_coding(5:8)));
 
+    % Of course I can use the string type in MATLAB, but it only supports versions after R2016b.
+    % So in order to  be compatible with older versions, I still use cell type.
     trs_data   = cell(trace_num,1);
-    trs_sample = cell(trace_num,1);
+    trs_sample = zeros(trace_num,sample_num);
     
     for i = 1:trace_num
         trs_data{i}   = read_data(fid,data_size);
-        trs_sample{i} = read_sample(fid,sample_num,sample_type,sample_size);
+        trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
     end
+
+    mat_file = 'F:/Sources/scagui/traces/usim_trs/celcom.mat';
+    save(mat_file,'trs_info','trs_data','trs_sample','-v7.3');
 
     fclose(fid);
 

@@ -35,6 +35,11 @@ menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 %% Panel
 panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
 panel_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
+stc = {'Male',52,true,[];'Male',40,true,[];'Female',25,false,[]};
+% class(stc)
+stc(end+1,:)= {'X',30,true,true};
+table_files = uitable(panel_tips,'Data',stc);
+
 
 %% Axes
 % axes_plot = axes('Parent',fig_top,'Position',[0.3 0.3 0.7 0.7]);
@@ -59,8 +64,10 @@ plot(x,sin(x),'Parent',axes_plot1);
 plot(x,cos(x),'Parent',axes_plot2);
 plot(x,tan(x),'Parent',axes_plot3);
 
+
 % This improves the redering performance remarkably!
 set(gcf, 'Renderer', 'painters');
+% gcf.GraphicsSmoothing = 'off';
 set(gca, 'SortMethod','childorder');
 
 
