@@ -13,7 +13,9 @@ close all;
 
 %% Figure
 fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 200 1280 720]);
-fig_top.MenuBar = 'None';
+% fig_top.MenuBar = 'None';
+% fig_top.Renderer = 'painters';
+
 
 %% Menu
 menu_file = uimenu(fig_top,'Label','нд╪Ч');
@@ -56,6 +58,10 @@ x = -pi:0.1:pi;
 plot(x,sin(x),'Parent',axes_plot1);
 plot(x,cos(x),'Parent',axes_plot2);
 plot(x,tan(x),'Parent',axes_plot3);
+
+% This improves the redering performance remarkably!
+set(gcf, 'Renderer', 'painters');
+set(gca, 'SortMethod','childorder');
 
 
 end

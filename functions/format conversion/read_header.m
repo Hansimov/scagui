@@ -6,7 +6,7 @@ function trs_info = read_header(fid)
 % ---------------------------------------------------------------------------------------------
 % 0x41   NT    M    int       4                  Number of traces
 % 0x42   NS    M    int       4                  Number of samples per trace
-% 0x43   SC    M    byte      1                  Sample Coding (see table )
+% 0x43   SC    M    byte      1                  Sample coding (see table below)
 % 0x44   DS    O    short     2       0          Length of cryptographic data included in trace
 % 0x45   TS    O    byte      1       0          Title space reserved per trace
 % 0x46   GT    O    byte[]    var     "trace"    Global trace title
@@ -23,8 +23,13 @@ function trs_info = read_header(fid)
 % 0x5F   TB    M    none      0                  Trace block marker: an empty TLV that marks
 %                                                the end of the header
 % ----------------------------------------------------------------------------------------------
-% # 'var' in Length means 'variable'
-% ---------------------------------------------------------------------------------------------- %
+% # 'var' in Length means 'variable'.
+% 
+% # SC defines the sample coding:
+%
+%   bit 8-6   reserved, set to '000'
+%   bit 5     integer (0) or floating point (1)
+%   bit 4-1   Sample length in bytes (valid values are 1, 2, 4)
 %
 % ---------------------------------------------------------------------------------------------- %
 % The object coding always starts with the tag byte.
@@ -41,12 +46,7 @@ function trs_info = read_header(fid)
 % The value of the numeric objects is coded little endian (LSB first).
 % The float values use the IEEE 754 coding which is commonly supported by
 %   modern programming languages.
-%
-% Object SC defines the sample coding:
-%
-% bit 8-6   reserved, set to '000'
-% bit 5     integer (0) or floating point (1)
-% bit 4-1   Sample length in bytes (valid values are 1, 2, 4)
+% 
 % ---------------------------------------------------------------------------------------------- %
 %
 % ---------------------------------------------------------------------------------------------- %
@@ -128,19 +128,21 @@ function trs_info = read_header(fid)
     end
 end
 
+% If you use class(), you may find that what fread() return is 'double'.
+% It doesn't matter. It doesn't affect the format conversion.
 function str = read_value(fid)
     len = fread(fid,1,'uint8');
     str = read_n_times(fid,len);
 end
 
+% Once I wrote a complicated function, but now I know it was unnecessary.
 function str = read_n_times(fid,n)
     str = [];
     for i = 1:n
         % If n == 0, (in '5F') this won't be executed.
-        % Little-endian ordering by default.
+        % Little-endian by default
         str = [dec2hex(fread(fid,1,'uint8'),2) str];
     end
 end
-
 
 
