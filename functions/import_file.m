@@ -22,9 +22,7 @@ if filename ~= 0
     [path_part,name_part,ext_part] = fileparts(full_name);
     % > Later I will check whether one file has been imported,
     % >   and ask the user whether to overwrite it if it has.
-    file_info{end+1,1} = name_part;
-    file_info{end,2} = ext_part;
-    file_info{end,3} = pathname;
+    file_info(end+1,1:3) = {name_part,ext_part,pathname};
     set(table_files,'Data',file_info);
 else
 end

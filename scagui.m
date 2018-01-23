@@ -27,6 +27,7 @@ table_files = uitable(panel_tips,'Units','normalized','Position',[0 0.4 1.0 0.6]
 table_files.ColumnName = {'文件','类型','路径'};
 table_files.Data = file_info;
 table_files.CellSelectionCallback = @table_cell_operation;
+% table_files.ButtonDownFcn = @sss;
 
 %% Menu
 menu_file = uimenu(fig_top,'Label','文件');
@@ -66,7 +67,6 @@ x = -pi:0.1:pi;
 plot(x,sin(x),'Parent',axes_plot1);
 plot(x,cos(x),'Parent',axes_plot2);
 plot(x,tan(x),'Parent',axes_plot3);
-
 
 % This improves the redering performance remarkably!
 set(gcf, 'Renderer', 'painters');

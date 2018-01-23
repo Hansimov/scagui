@@ -44,13 +44,24 @@ function trs_info = trs2mat(trs_filename,mat_filename)
     trs_data   = cell(trace_num,1);
     trs_sample = zeros(trace_num,sample_num);
     
+    progress_bar = waitbar(0,'1','Name','文件格式转换', ...
+                'CreateCancelBtn', 'setappdata(gcbf,''canceling'',1)');
+    setappdata(progress_bar,'canceling',0);
     for i = 1:trace_num
+        if getappdata(progress_bar,'canceling')
+            break ;
+        end
+        waitbar(i/trace_num,progress_bar,sprintf('正在处理曲线： %05d / %05d',i,trace_num));
         trs_data{i}   = read_data(fid,data_size);
         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
     end
-
-    mat_file = mat_filename;
-    save(mat_file,'trs_info','trs_data','trs_sample','-v7.3');
+    
+    waitbar(i/trace_num,progress_bar,'正在保存文件，请耐心等待 ...');
+    save(mat_filename,'trs_info','trs_data','trs_sample','-v7.3');
+    delete(progress_bar); % Use delete(), instead of close()
+%     success_message = msgbox('文件保存成功');
+%     pause(1.0);
+%     delete(success_message);
 
     fclose(fid);
 

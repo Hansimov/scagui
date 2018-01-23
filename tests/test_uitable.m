@@ -14,15 +14,17 @@
 %         end
 % end
 
-function test()
-f = figure('Position',[200 200 400 150]);
-dat = rand(3); 
-cnames = {'X-Data','Y-Data','Z-Data'};
-rnames = {'First','Second','Third'};
-t = uitable('Parent',f,'Data',dat,'ColumnName',cnames,... 
-            'CellSelectionCallback', @cbk, ...
-            'RowName',rnames,'Position',[20 20 360 100]);
-      function cbk(~, ~)
-          ty = get(f, 'SelectionType')
-      end
-end
+
+% function test()
+% f = figure('Position',[200 200 400 150]);
+% dat = rand(3); 
+% cnames = {'X-Data','Y-Data','Z-Data'};
+% rnames = {'First','Second','Third'};
+% t = uitable('Parent',f,'Data',dat,'ColumnName',cnames,... 
+%             'CellSelectionCallback', @cbk, ...
+%             'RowName',rnames,'Position',[20 20 360 100]);
+%       function cbk(~, ~)
+%           ty = get(f, 'SelectionType')
+%       end
+% end
+
