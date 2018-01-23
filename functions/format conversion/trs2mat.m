@@ -1,4 +1,4 @@
-function trs_info = trs2mat(trs_file)
+function trs_info = trs2mat(trs_filename,mat_filename)
 % FormatConversion() is more likely a function name, but I follow the MATLAB naming styles.
 % This function convert *.trs to *.mat:
 %   - Return basic infomation of the traces
@@ -16,7 +16,7 @@ function trs_info = trs2mat(trs_file)
 % *.trs: trace files collected by the hardwares: PowerRecorder/EMRecorder
 % A typical format of *.trs is TLV: Tag + Length + Value
 
-    fid = fopen(trs_file,'r');
+    fid = fopen(trs_filename,'r');
 
     if fid < 0
         disp('Open file error!');
@@ -28,7 +28,7 @@ function trs_info = trs2mat(trs_file)
     % dec2hex(fread(fid,1,'uint8'),2)
     trace_num  = trs_info.nt{2};
     sample_num = trs_info.ns{2};
-    data_size  = trs_info.ds{2}
+    data_size  = trs_info.ds{2};
 
     % Sample Coding: (trs_info.sc)
     %   0000 0001
@@ -49,7 +49,7 @@ function trs_info = trs2mat(trs_file)
         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
     end
 
-    mat_file = 'F:/Sources/scagui/traces/usim_trs/celcom.mat';
+    mat_file = mat_filename;
     save(mat_file,'trs_info','trs_data','trs_sample','-v7.3');
 
     fclose(fid);

@@ -9,13 +9,24 @@ function scagui()
 %% Initialization
 close all;
 
-
-
 %% Figure
 fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 200 1280 720]);
-% fig_top.MenuBar = 'None';
+fig_top.MenuBar = 'None';
 % fig_top.Renderer = 'painters';
 
+% This is a temporary expedient. 
+% I will use handle later. Also rename this variable. 
+global file_info;
+file_info = {'name','ext','path'};
+
+%% Panel
+panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
+panel_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
+
+table_files = uitable(panel_tips,'Units','normalized','Position',[0 0.4 1.0 0.6]);
+table_files.ColumnName = {'文件','类型','路径'};
+table_files.Data = file_info;
+table_files.CellSelectionCallback = @table_cell_operation;
 
 %% Menu
 menu_file = uimenu(fig_top,'Label','文件');
@@ -23,7 +34,7 @@ menu_data = uimenu(fig_top,'Label', '数据');
 menu_analysis = uimenu(fig_top, 'Label', '分析');
 
 menu_file_open = uimenu(menu_file, 'Label', '新建');
-menu_file_import = uimenu(menu_file, 'Label', '导入','Callback',@file_select);
+menu_file_import = uimenu(menu_file, 'Label', '导入','Callback',{@import_file,table_files});
 
 menu_data_filter = uimenu(menu_data, 'Label', '滤波');
 % menu_data_filter_lowpass = uimenu(menu_data_filter, 'Label', '低通');
@@ -31,14 +42,6 @@ menu_data_resample = uimenu(menu_data, 'Label', '重采样');
 menu_data_align = uimenu(menu_data, 'Label','对齐');
 
 menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
-
-%% Panel
-panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
-panel_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
-stc = {'Male',52,true,[];'Male',40,true,[];'Female',25,false,[]};
-% class(stc)
-stc(end+1,:)= {'X',30,true,true};
-table_files = uitable(panel_tips,'Data',stc);
 
 
 %% Axes
