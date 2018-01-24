@@ -30,7 +30,7 @@ function import_file(src,event,table_files)
         full_name = [pathname filename{i}];
         [path_part,name_part,ext_part] = fileparts(full_name);
         file_pointer(end+1,1:3) = {name_part,ext_part,pathname};
-        file_info(end+1,:) = get_file_info(full_name,ext_part);
+        file_info{end+1,1} = get_file_info(full_name,ext_part);
     end
     set(table_files,'Data',file_pointer);
 end

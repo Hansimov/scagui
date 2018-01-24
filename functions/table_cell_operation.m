@@ -14,13 +14,9 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     ext_part = cell_data{row,2};
     path_part = cell_data{row,3};
     full_name = [path_part name_part ext_part];
+    set(table_traceinfo,'Data',file_info{row,1});
     
     create_context();
-    file_info
-    file_info{row}
-    file_info(row)
-    set(table_traceinfo,'Data',file_info{row});
-    
 
     function create_context()
         uimenu(ctmenu,'Label','²é¿´','Callback',@view_file);
