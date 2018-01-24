@@ -16,18 +16,24 @@ fig_top.MenuBar = 'None';
 
 % This is a temporary expedient. 
 % I will use handle later. Also rename this variable. 
-global file_info;
-file_info = {'name','ext','path'};
+global file_pointer file_info;
+file_pointer = {'name','ext','path'};
+file_info = {};
 
 %% Panel
 panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
 panel_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
 
-table_files = uitable(panel_tips,'Units','normalized','Position',[0 0.4 1.0 0.6]);
+table_traceinfo = uitable(panel_tips,'Units','normalized','Position',[0 0 1.0 0.7]);
+table_traceinfo.ColumnName = {'属性','类型','大小'};
+table_traceinfo.Data = {'aa','bb';'cc','dd'};
+
+table_files = uitable(panel_tips,'Units','normalized','Position',[0 0.7 1.0 0.3]);
 table_files.ColumnName = {'文件','类型','路径'};
-table_files.Data = file_info;
-table_files.CellSelectionCallback = @table_cell_operation;
-% table_files.ButtonDownFcn = @sss;
+table_files.Data = file_pointer;
+table_files.CellSelectionCallback = {@table_cell_operation,table_traceinfo};
+% table_files.ButtonDownFcn = @fff;
+
 
 %% Menu
 menu_file = uimenu(fig_top,'Label','文件');

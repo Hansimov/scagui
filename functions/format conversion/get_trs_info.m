@@ -7,9 +7,7 @@ function trs_info = get_trs_info(trs_file)
         return
     end
 
-    trs_info = read_header(fid);
+    trs_info = struct2cell(read_header(fid));
 
-    m = dec2hex(fread(fid,320,'uint8'),2);
-    m'
     fclose(fid);
 end

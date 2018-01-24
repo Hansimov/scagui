@@ -1,4 +1,4 @@
-function trs_info = trs2mat(trs_filename,mat_filename)
+function [trs_info,canceled ]= trs2mat(trs_filename,mat_filename)
 % FormatConversion() is more likely a function name, but I follow the MATLAB naming styles.
 % This function convert *.trs to *.mat:
 %   - Return basic infomation of the traces
@@ -23,7 +23,7 @@ function trs_info = trs2mat(trs_filename,mat_filename)
         return
     end
 
-    trs_info   = read_header(fid);
+    trs_info = read_header(fid);
 
     % dec2hex(fread(fid,1,'uint8'),2)
     trace_num  = trs_info.nt{2};
@@ -44,8 +44,8 @@ function trs_info = trs2mat(trs_filename,mat_filename)
     trs_data   = cell(trace_num,1);
     trs_sample = zeros(trace_num,sample_num);
     
-    progress_bar = waitbar(0,'1','Name','文件格式转换', ...
-                'CreateCancelBtn', 'setappdata(gcbf,''canceling'',1)');
+    progress_bar = waitbar(0,'正在读取文件 ...','Name','文件格式转换', ...
+            'CreateCancelBtn','setappdata(gcbf,''canceling'',1)');
     setappdata(progress_bar,'canceling',0);
     for i = 1:trace_num
         if getappdata(progress_bar,'canceling')
@@ -56,13 +56,16 @@ function trs_info = trs2mat(trs_filename,mat_filename)
         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
     end
     
-    waitbar(i/trace_num,progress_bar,'正在保存文件，请耐心等待 ...');
-    save(mat_filename,'trs_info','trs_data','trs_sample','-v7.3');
-    delete(progress_bar); % Use delete(), instead of close()
-%     success_message = msgbox('文件保存成功');
-%     pause(1.0);
-%     delete(success_message);
-
+    canceled = getappdata(progress_bar,'canceling');
+    % Use delete(), instead of close() !
+    delete(progress_bar);
+    
+    if ~canceled
+        save_bar = waitbar(1,'正在保存文件，请耐心等待 ...','Name','保存文件');
+        save(mat_filename,'trs_info','trs_data','trs_sample','-v7.3');
+        delete(save_bar);
+    end
+    
     fclose(fid);
 
 end

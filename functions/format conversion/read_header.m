@@ -73,6 +73,22 @@ function trs_info = read_header(fid)
 
 % ---------------------------------------------------------------------------------------------- %
 
+    % Default trace infomation
+    trs_info.nt = {'Number of Traces',0};
+    trs_info.ns = {'Number of Samples',0};
+    trs_info.sc = {'Sample Coding',0};
+    trs_info.ds = {'Data Size',0};
+    trs_info.ts = {'Title Space',0};
+    trs_info.gt = {'Global Title','trace'};
+    trs_info.dc = {'Description',''};
+    trs_info.xo = {'X-axis Offset',0};
+    trs_info.xl = {'X-axis Label',''};
+    trs_info.yl = {'Y-axis Label',''};
+    trs_info.xs = {'X-axis Scale',1};
+    trs_info.ys = {'Y-axis Scale',1};
+    trs_info.to = {'Trace Offset',0};
+    trs_info.ls = {'Log Scale',0};
+
     tag = dec2hex(fread(fid,1,'uint8'),2);
 
     readmode = 1;
@@ -118,10 +134,10 @@ function trs_info = read_header(fid)
                 val = hex2dec(val);
                 trs_info.to = {'Trace Offset',val};
             case '4E'
-                trs_info.ls = {'Log Scale',val}
+                trs_info.ls = {'Log Scale',val};
             case '5F'
                 readmode = 2;
-                break; % Avoid read more.
+                break; % Avoid executing tag reading below.
             otherwise
         end
         tag = dec2hex(fread(fid,1,'uint8'),2);
