@@ -38,7 +38,6 @@ table_files.Data = file_pointer;
 table_files.CellSelectionCallback = {@table_cell_operation,table_traceinfo};
 % table_files.ButtonDownFcn = @fff;
 
-
 %% Menu
 menu_file = uimenu(fig_top,'Label','文件');
 menu_data = uimenu(fig_top,'Label', '数据');

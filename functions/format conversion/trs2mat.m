@@ -42,7 +42,8 @@ function [trs_info,canceled ]= trs2mat(trs_filename,mat_filename)
     % Of course I can use the string type in MATLAB, but it only supports versions after R2016b.
     % So in order to  be compatible with older versions, I still use cell type.
     trs_data   = cell(trace_num,1);
-    trs_sample = zeros(trace_num,sample_num);
+%     trs_sample = zeros(trace_num,sample_num);
+    trs_sample = cell(trace_num,1);
     
     progress_bar = waitbar(0,'正在读取文件 ...','Name','文件格式转换', ...
             'CreateCancelBtn','setappdata(gcbf,''canceling'',1)');
@@ -53,7 +54,8 @@ function [trs_info,canceled ]= trs2mat(trs_filename,mat_filename)
         end
         waitbar(i/trace_num,progress_bar,sprintf('正在处理曲线： %05d / %05d',i,trace_num));
         trs_data{i}   = read_data(fid,data_size);
-        trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
+%         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
+        trs_sample{i} = read_sample(fid,sample_num,sample_type,sample_size);
     end
     
     canceled = getappdata(progress_bar,'canceling');
@@ -83,11 +85,11 @@ function sample = read_sample(fid,sample_num,sample_type,sample_size)
     if sample_type == 0  % Integer type
         switch sample_size
             case 1
-                sample = fread(fid,sample_num,'int8');
+                sample = int8(fread(fid,sample_num,'int8'));
             case 2
-                sample = fread(fid,sample_num,'int16');
+                sample = int16(fread(fid,sample_num,'int16'));
             case 4
-                sample = fread(fid,sample_num,'int32');
+                sample = int32(fread(fid,sample_num,'int32'));
             otherwise
                 disp('Invalid sample length!');
                 return ;
@@ -95,7 +97,7 @@ function sample = read_sample(fid,sample_num,sample_type,sample_size)
     else                 % Float type
         switch sample_size
             case 4
-                sample = fread(fid,sample_num,'float');
+                sample = single(fread(fid,sample_num,'float32'));
             otherwise
                 disp('Invalid sample length!');
                 return ;
