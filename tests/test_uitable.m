@@ -28,3 +28,4 @@
 %       end
 % end
 
+uitable(figure,'Data', {false;true;true;false;false}, 'ColumnEdit', true, 'RowStriping','off')

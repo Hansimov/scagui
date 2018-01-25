@@ -27,11 +27,13 @@ panel_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0
 table_traceinfo = uitable(panel_tips,'Units','normalized','Position',[0 0 1.0 0.7]);
 table_traceinfo.ColumnName = {'属性','值'};
 table_traceinfo.ColumnWidth = {160 100};
+table_traceinfo.RowStriping = 'off';
 table_traceinfo.Data = {};
 
 table_files = uitable(panel_tips,'Units','normalized','Position',[0 0.7 1.0 0.3]);
-table_files.ColumnName = {'文件','类型','路径'};
-table_files.ColumnWidth = {160 60 'auto'};
+table_files.ColumnName = {'选中','文件','类型','路径'};
+table_files.ColumnEditable = [true false false false];
+table_files.ColumnWidth = {30 140 60 'auto'};
 table_files.Data = file_pointer;
 table_files.CellSelectionCallback = {@table_cell_operation,table_traceinfo};
 % table_files.ButtonDownFcn = @fff;

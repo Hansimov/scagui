@@ -29,16 +29,9 @@ function import_file(src,event,table_files)
     for i = 1:numel(filename)
         full_name = [pathname filename{i}];
         [path_part,name_part,ext_part] = fileparts(full_name);
-        file_pointer(end+1,1:3) = {name_part,ext_part,pathname};
-        file_info{end+1,1} = get_file_info(full_name,ext_part);
+        file_pointer(end+1,1:4) = {false,name_part,ext_part,pathname};
+        file_info{end+1,1} = get_trs_info(full_name);
     end
+    
     set(table_files,'Data',file_pointer);
-end
-
-function current_file_info = get_file_info(full_name,ext_part)
-    if isequal(ext_part,'.trs')
-        current_file_info = get_trs_info(full_name);
-    elseif isequal(ext_part,'.mat')
-        current_file_info = get_mat_info(full_name);
-    end
 end

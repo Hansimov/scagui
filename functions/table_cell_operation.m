@@ -1,5 +1,5 @@
 function table_cell_operation(table_src,table_event,table_traceinfo)
-    global file_info;
+    global file_info file_pointer;
     % When a cell is selected, it will cause an error when do other things.
     if isempty(table_event.Indices)
         return;
@@ -10,9 +10,9 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     table_src.UIContextMenu = ctmenu;
 
     cell_data = get(table_src, 'Data');
-    name_part = cell_data{row,1};
-    ext_part = cell_data{row,2};
-    path_part = cell_data{row,3};
+    name_part = cell_data{row,2};
+    ext_part = cell_data{row,3};
+    path_part = cell_data{row,4};
     full_name = [path_part name_part ext_part];
     set(table_traceinfo,'Data',file_info{row,1});
     
@@ -45,9 +45,9 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
                                         'ÊÇ','·ñ','ÊÇ');
              switch file_open_choice
                  case 'ÊÇ'
-                     global file_pointer;
                      [mat_path_part,mat_name_part,mat_ext_part] = fileparts(mat_fullname);
-                     file_pointer(end+1,1:3) = {mat_name_part,mat_ext_part,mat_pathname};
+                     file_pointer(end+1,1:4) = {false,mat_name_part,mat_ext_part,mat_pathname};
+                     file_info{end+1,1} = get_trs_info(full_name);
                      set(table_src,'Data',file_pointer);
                  case '·ñ'
                  otherwise
