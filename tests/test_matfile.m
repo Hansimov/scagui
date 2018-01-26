@@ -8,8 +8,7 @@
 tic;
 m11 = matfile('F:\Sources\MATLAB\work\scagui\traces\usim_trs\usim-int8.mat');
 x11 = m11.trs_sample(1,1);
-% y11 = x11{:};
-figure;
+% y11 = x11{:};figure;
 plot(x11{:})
 xlim([0 inf])
 toc;
