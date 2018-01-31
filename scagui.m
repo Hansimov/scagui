@@ -5,20 +5,22 @@
 % Model-View-Controller pattern will be used.
 % Why I name the labels and titles in Chinese? 
 % Because this software is for Chinese students.
+
 function scagui()
 %% Initialization
 close all;
 
 %% Figure
-fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 200 1280 720]);
+fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 100 1080 520]);
 fig_top.MenuBar = 'None';
 % fig_top.Renderer = 'painters';
 
 % This is a temporary expedient. 
 % I will use handle later. Also rename this variable. 
-global file_pointer file_info;
+global file_pointer file_info file_entity;
 file_pointer = {};
 file_info = {};
+file_entity = {};
 
 %% Panel
 panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
@@ -43,7 +45,7 @@ menu_file = uimenu(fig_top,'Label','文件');
 menu_data = uimenu(fig_top,'Label', '数据');
 menu_analysis = uimenu(fig_top, 'Label', '分析');
 
-menu_file_open = uimenu(menu_file, 'Label', '新建');
+menu_file_new = uimenu(menu_file, 'Label', '新建');
 menu_file_import = uimenu(menu_file, 'Label', '导入','Callback',{@import_file,table_files});
 
 menu_data_filter = uimenu(menu_data, 'Label', '滤波');
@@ -64,13 +66,14 @@ menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 %% Plot
 
 tabgroup_plot = uitabgroup(panel_plot);
-tab1 = uitab(tabgroup_plot,'Title','原始');
-tab2 = uitab(tabgroup_plot,'Title','低通');
-tab3 = uitab(tabgroup_plot,'Title','对齐');
+tab_plot ={};
+tab_plot{1} = uitab(tabgroup_plot,'Title','原始');
+tab_plot{2} = uitab(tabgroup_plot,'Title','低通');
+tab_plot{3} = uitab(tabgroup_plot,'Title','对齐');
 
-axes_plot1 = axes(tab1);
-axes_plot2 = axes(tab2);
-axes_plot3 = axes(tab3);
+axes_plot1 = axes(tab_plot{1});
+axes_plot2 = axes(tab_plot{2});
+axes_plot3 = axes(tab_plot{3});
 
 x = -pi:0.1:pi;
 plot(x,sin(x),'Parent',axes_plot1);

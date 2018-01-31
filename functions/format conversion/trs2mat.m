@@ -1,4 +1,4 @@
-function [trs_info,canceled ]= trs2mat(trs_filename,mat_filename)
+function [trs_info, canceled]= trs2mat(trs_filename, mat_filename)
 % FormatConversion() is more likely a function name, but I follow the MATLAB naming styles.
 % This function convert *.trs to *.mat:
 %   - Return basic infomation of the traces
@@ -40,7 +40,7 @@ function [trs_info,canceled ]= trs2mat(trs_filename,mat_filename)
     sample_size   = bin2dec(arr2str(sample_coding(5:8)));
 
     % Of course I can use the string type in MATLAB, but it only supports versions after R2016b.
-    % So in order to  be compatible with older versions, I still use cell type.
+    % So in order to be compatible with older versions, I still use cell type.
     trs_data   = cell(trace_num,1);
 %     trs_sample = zeros(trace_num,sample_num);
     trs_sample = cell(trace_num,1);
@@ -54,7 +54,10 @@ function [trs_info,canceled ]= trs2mat(trs_filename,mat_filename)
         end
         waitbar(i/trace_num,progress_bar,sprintf('正在处理曲线： %05d / %05d',i,trace_num));
         trs_data{i}   = read_data(fid,data_size);
-%         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size);
+        % Use () to assign values will convert its type to double.
+        % So I use {} to keep int8
+        % Currently, this structure is most effecient.
+%         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size); 
         trs_sample{i} = read_sample(fid,sample_num,sample_type,sample_size);
     end
     

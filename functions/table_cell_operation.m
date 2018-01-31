@@ -1,5 +1,5 @@
 function table_cell_operation(table_src,table_event,table_traceinfo)
-    global file_info file_pointer;
+    global file_info file_pointer file_entity;
     % When a cell is selected, it will cause an error when do other things.
     if isempty(table_event.Indices)
         return;
@@ -27,8 +27,14 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     end
 
     function view_file(~,~)
+        figure;
     end
     function delete_file(~,~)
+        file_entity(row,:) = [];
+        file_info(row,:) = [];
+        file_pointer(row,:) = [];
+        set(table_traceinfo,'Data',{});
+        set(table_src, 'Data', file_pointer);
     end
     
     function convert_to_mat(~,~)
