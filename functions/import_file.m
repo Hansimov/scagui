@@ -1,5 +1,5 @@
 function import_file(src,event,table_files)
-    global file_pointer file_info file_entity;
+    global file_container file_pointer;
     [filename, pathname, ~] = uigetfile( ...
         {...   
         '*.mat;*.trs','所有数据类型';...
@@ -29,14 +29,9 @@ function import_file(src,event,table_files)
     for i = 1:numel(filename)
         full_name = [pathname filename{i}];
         [path_part,name_part,ext_part] = fileparts(full_name);
+        file_container{end+1,1} = TraceFile(full_name);
         file_pointer(end+1,1:4) = {false,name_part,ext_part,pathname};
-        file_info{end+1,1} = get_trs_info(full_name);
-        if isequal(ext_part,'.mat')
-            file_entity{end+1,1} = matfile(full_name);
-        elseif isequal(ext_part,'.trs')
-            file_entity{end+1,1} = full_name;
-        end
     end
-    
+
     set(table_files,'Data',file_pointer);
 end

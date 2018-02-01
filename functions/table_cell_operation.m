@@ -1,5 +1,6 @@
 function table_cell_operation(table_src,table_event,table_traceinfo)
-    global file_info file_pointer file_entity;
+% %     global file_info file_pointer file_entity;
+    global file_container file_pointer;
     % When a cell is selected, it will cause an error when do other things.
     if isempty(table_event.Indices)
         return;
@@ -14,7 +15,8 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     ext_part = cell_data{row,3};
     path_part = cell_data{row,4};
     full_name = [path_part name_part ext_part];
-    set(table_traceinfo,'Data',file_info{row,1});
+%     set(table_traceinfo,'Data',file_info{row,1});
+    set(table_traceinfo,'Data',file_container{row,1}.info);
     
     create_context();
 
@@ -27,11 +29,14 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     end
 
     function view_file(~,~)
-        figure;
+        global axes_plot1;
+        plot(axes_plot1,cell2mat(file_container{row,1}.entity.trs_sample(1,1)));
+        axes_plot1.XLim = [0 inf];
     end
     function delete_file(~,~)
-        file_entity(row,:) = [];
-        file_info(row,:) = [];
+%         file_entity(row,:) = [];
+%         file_info(row,:) = [];
+        file_container(row,:) = [];
         file_pointer(row,:) = [];
         set(table_traceinfo,'Data',{});
         set(table_src, 'Data', file_pointer);
@@ -53,7 +58,8 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
                  case 'ÊÇ'
                      [mat_path_part,mat_name_part,mat_ext_part] = fileparts(mat_fullname);
                      file_pointer(end+1,1:4) = {false,mat_name_part,mat_ext_part,mat_pathname};
-                     file_info{end+1,1} = get_trs_info(full_name);
+                     file_container{end+1,1} = TraceFile(mat_fullname);
+%                      file_info{end+1,1} = get_trs_info(full_name);
                      set(table_src,'Data',file_pointer);
                  case '·ñ'
                  otherwise

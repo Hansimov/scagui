@@ -17,10 +17,9 @@ fig_top.MenuBar = 'None';
 
 % This is a temporary expedient. 
 % I will use handle later. Also rename this variable. 
-global file_pointer file_info file_entity;
+global file_container file_pointer;
+file_container = {};
 file_pointer = {};
-file_info = {};
-file_entity = {};
 
 %% Panel
 panel_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
@@ -56,33 +55,25 @@ menu_data_align = uimenu(menu_data, 'Label','对齐');
 menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 
 
-%% Axes
-% axes_plot = axes('Parent',fig_top,'Position',[0.3 0.3 0.7 0.7]);
-% axes_plot = axes('Parent',panel_plot);
-% x = -pi:0.1:pi;
-% y = plot(x,sin(x),'Parent',axes_curve);
-% axes_plot.Visible = 'off';
 
 %% Plot
 
 tabgroup_plot = uitabgroup(panel_plot);
+sld = uicontrol('Style', 'slider','Min',1,'Max',100,'Value',100, 'SliderStep',[0.01 0.01], ...
+                'Units','normalized', 'Parent',panel_plot,'Position', [0.98 0 0.1 1.0]); 
 tab_plot ={};
 tab_plot{1} = uitab(tabgroup_plot,'Title','原始');
 tab_plot{2} = uitab(tabgroup_plot,'Title','低通');
 tab_plot{3} = uitab(tabgroup_plot,'Title','对齐');
 
+global axes_plot1;
 axes_plot1 = axes(tab_plot{1});
 axes_plot2 = axes(tab_plot{2});
 axes_plot3 = axes(tab_plot{3});
 
-x = -pi:0.1:pi;
-plot(x,sin(x),'Parent',axes_plot1);
-plot(x,cos(x),'Parent',axes_plot2);
-plot(x,tan(x),'Parent',axes_plot3);
-
 % This improves the redering performance remarkably!
 set(gcf, 'Renderer', 'painters');
-% gcf.GraphicsSmoothing = 'off';
+set(gcf, 'GraphicsSmoothing', 'off');
 set(gca, 'SortMethod','childorder');
 
 
