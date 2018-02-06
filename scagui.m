@@ -25,22 +25,22 @@ file_pointer = {};
 
 % box_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
 % box_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
-box_top = uix.HBoxFlex('Parent',fig_top);
-box_tips = uix.VBoxFlex('Parent',box_top);
-box_plot = uix.VBoxFlex('Parent',box_top);
+hbox_top = uix.HBoxFlex('Parent',fig_top);
+vbox_tips = uix.VBoxFlex('Parent',hbox_top);
+vbox_plot = uix.VBoxFlex('Parent',hbox_top);
 
 
 
 
 % table_files = uitable(box_tips,'Units','normalized','Position',[0 0.7 1.0 0.3]);
-table_files = uitable('Parent',box_tips);
+table_files = uitable('Parent',vbox_tips);
 table_files.ColumnName = {'选中','文件','类型','路径'};
 table_files.ColumnEditable = [true false false false];
 table_files.ColumnWidth = {30 140 60 'auto'};
 table_files.Data = file_pointer;
 
 % table_traceinfo = uitable( box_tips,'Units','normalized','Position',[0 0 1.0 0.7]);
-table_traceinfo = uitable('Parent',box_tips);
+table_traceinfo = uitable('Parent',vbox_tips);
 table_traceinfo.ColumnName = {'属性','值'};
 table_traceinfo.ColumnWidth = {160 100};
 table_traceinfo.RowStriping = 'off';
@@ -49,8 +49,8 @@ table_traceinfo.Data = {};
 table_files.CellSelectionCallback = {@table_cell_operation,table_traceinfo};
 % table_files.ButtonDownFcn = @fff;
 
-set( box_top, 'Widths', [-1 -2], 'Spacing', 5 );
-set( box_tips, 'Heights', [-1 -2], 'Spacing', 5 );
+set( hbox_top, 'Widths', [-1 -2], 'Spacing', 5 );
+set( vbox_tips, 'Heights', [-1 -2], 'Spacing', 5 );
 %% Menu
 menu_file = uimenu(fig_top,'Label','文件');
 menu_data = uimenu(fig_top,'Label', '数据');
@@ -70,7 +70,7 @@ menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 
 %% Plot
 
-tabgroup_plot = uitabgroup(box_plot);
+tabgroup_plot = uitabgroup(vbox_plot);
 % sld = uicontrol('Style', 'slider','Min',1,'Max',100,'Value',100, 'SliderStep',[0.01 0.01], ...
 %                 'Units','normalized', 'Parent',box_plot,'Position', [0.98 0 0.1 1.0]); 
 tab_plot ={};
