@@ -17,6 +17,7 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     full_name = [path_part name_part ext_part];
 %     set(table_traceinfo,'Data',file_info{row,1});
     set(table_traceinfo,'Data',file_container{row,1}.info);
+    table_traceinfo.ColumnFormat = {'char' 'char'};
     
     create_context();
 

@@ -29,9 +29,6 @@ hbox_top = uix.HBoxFlex('Parent',fig_top);
 vbox_tips = uix.VBoxFlex('Parent',hbox_top);
 vbox_plot = uix.VBoxFlex('Parent',hbox_top);
 
-
-
-
 % table_files = uitable(box_tips,'Units','normalized','Position',[0 0.7 1.0 0.3]);
 table_files = uitable('Parent',vbox_tips);
 table_files.ColumnName = {'选中','文件','类型','路径'};

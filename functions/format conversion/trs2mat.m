@@ -26,18 +26,22 @@ function [trs_info, canceled]= trs2mat(trs_filename, mat_filename)
     trs_info = read_header(fid);
 
     % dec2hex(fread(fid,1,'uint8'),2)
-    trace_num  = trs_info.nt{2};
-    sample_num = trs_info.ns{2};
-    data_size  = trs_info.ds{2};
+    trace_num   = trs_info.nt{2};
+    sample_num  = trs_info.ns{2};
+    data_size   = trs_info.ds{2};
+    sample_type = trs_info.st{2};
+%     sample_size = trs_info.ss{2};
+    
 
-    % Sample Coding: (trs_info.sc)
-    %   0000 0001
-    %   bit 8-6   reserved, set to '000'
-    %   bit 5     integer (0) or floating point (1)
-    %   bit 4-1   Sample length in bytes (valid values are 1, 2, 4)
-    sample_coding = hex2bin(trs_info.sc{2});
-    sample_type   = sample_coding(4);
-    sample_size   = bin2dec(arr2str(sample_coding(5:8)));
+%     % Sample Coding: (trs_info.sc)
+%     %   0000 0001
+%     %   bit 8-6   reserved, set to '000'
+%     %   bit 5     integer (0) or floating point (1)
+%     %   bit 4-1   Sample length in bytes (valid values are 1, 2, 4)
+%     sample_coding = hex2bin(trs_info.sc{2});
+%     sample_type   = sample_coding(4);
+%     sample_size   = bin2dec(arr2str(sample_coding(5:8)));
+
 
     % Of course I can use the string type in MATLAB, but it only supports versions after R2016b.
     % So in order to be compatible with older versions, I still use cell type.
@@ -54,11 +58,11 @@ function [trs_info, canceled]= trs2mat(trs_filename, mat_filename)
         end
         waitbar(i/trace_num,progress_bar,sprintf('正在处理曲线： %05d / %05d',i,trace_num));
         trs_data{i}   = read_data(fid,data_size);
-        % Use () to assign values will convert its type to double.
-        % So I use {} to keep int8
+        % Use () to assign values will convert its type to double,
+        %   so I use {} to keep int8
         % Currently, this structure is most effecient.
 %         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size); 
-        trs_sample{i} = read_sample(fid,sample_num,sample_type,sample_size);
+        trs_sample{i} = read_sample(fid,sample_num,sample_type);
     end
     
     canceled = getappdata(progress_bar,'canceling');
@@ -84,27 +88,7 @@ function data = read_data(fid,data_size)
     data = cat(2,data{:});      % Concatenate the characters
 end
 
-function sample = read_sample(fid,sample_num,sample_type,sample_size)
-    if sample_type == 0  % Integer type
-        switch sample_size
-            case 1
-                sample = int8(fread(fid,sample_num,'int8'));
-            case 2
-                sample = int16(fread(fid,sample_num,'int16'));
-            case 4
-                sample = int32(fread(fid,sample_num,'int32'));
-            otherwise
-                disp('Invalid sample length!');
-                return ;
-        end
-    else                 % Float type
-        switch sample_size
-            case 4
-                sample = single(fread(fid,sample_num,'float32'));
-            otherwise
-                disp('Invalid sample length!');
-                return ;
-        end
-    end
+function sample = read_sample(fid,sample_num,sample_type)
+    sample = cast(fread(fid,sample_num,sample_type),sample_type);
     sample = sample';
 end

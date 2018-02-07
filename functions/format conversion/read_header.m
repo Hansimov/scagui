@@ -77,6 +77,8 @@ function trs_info = read_header(fid)
     trs_info.nt = {'Number of Traces',0};
     trs_info.ns = {'Number of Samples',0};
     trs_info.sc = {'Sample Coding',0};
+    trs_info.st = {'Sample Type','int8'};
+    trs_info.ss = {'Sample Size (Bytes)',1};
     trs_info.ds = {'Data Size',0};
     trs_info.ts = {'Title Space',0};
     trs_info.gt = {'Global Title','trace'};
@@ -104,6 +106,7 @@ function trs_info = read_header(fid)
                 trs_info.ns = {'Number of Samples',val};
             case '43'
                 trs_info.sc = {'Sample Coding',val};
+                [trs_info.st{2}, trs_info.ss{2}] = explain_sample_coding(trs_info.sc{2});
             case '44'
                 val = hex2dec(val);
                 trs_info.ds = {'Data Size',val};
@@ -161,4 +164,34 @@ function str = read_n_times(fid,n)
     end
 end
 
-
+function [sample_type, sample_size] = explain_sample_coding(sample_coding)
+    % Sample Coding: (trs_info.sc)
+    %   0000 0001
+    %   bit 8-6   reserved, set to '000'
+    %   bit 5     integer (0) or floating point (1)
+    %   bit 4-1   Sample length in bytes (valid values are 1, 2, 4)
+    sample_coding_vec = hex2bin(sample_coding);
+    sample_type_num   = sample_coding_vec(4);
+    sample_size   = bin2dec(arr2str(sample_coding_vec(5:8)));
+    if sample_type_num == 0
+        switch sample_size % Integer
+            case 1
+                sample_type = 'int8';
+            case 2
+                sample_type = 'int16';
+            case 4 
+                sample_type = 'int 32';
+            otherwise
+                disp('Invalid sample size!');
+                return ;
+        end
+    else
+        switch sample_size % Float
+            case 4
+                sample_type = 'single';
+            otherwise
+                disp('Invalid sample size!');
+                return ;
+        end
+    end
+end
