@@ -7,6 +7,7 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     end
     
     row = table_event.Indices(1);
+    col = table_event.Indices(2);
     ctmenu = uicontextmenu;
     table_src.UIContextMenu = ctmenu;
 
@@ -22,17 +23,29 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     create_context();
 
     function create_context()
-        uimenu(ctmenu,'Label','查看','Callback',@view_file);
-        uimenu(ctmenu,'Label','删除','Callback',@delete_file);
-        if strcmp(ext_part,'.trs')
-            uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convert_to_mat);
+        if col == 2
+            if strcmp(ext_part,'.trs')
+                uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convert_to_mat);
+            end
+            if strcmp(ext_part,'.mat')
+                uimenu(ctmenu,'Label','查看曲线','Callback',@view_file);
+            end
+            uimenu(ctmenu,'Label','删除对象','Callback',@delete_file);
+        elseif col == 4
+            uimenu(ctmenu,'Label','复制路径（包含文件名）','Callback',@copy_fullname);
+            uimenu(ctmenu,'Label','复制路径','Callback',@copy_dir);
         end
+    end
+    function copy_fullname(~,~)
+        disp(full_name);
+    end
+    function copy_dir(~,~)
+        disp(path_part);
     end
 
     function view_file(~,~)
-        global axes_plot1;
-        plot(axes_plot1,cell2mat(file_container{row,1}.entity.trs_sample(1,1)));
-        axes_plot1.XLim = [0 inf];
+%         global axes_plot1;
+        plot_trace(cell2mat(file_container{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
     end
     function delete_file(~,~)
 %         file_entity(row,:) = [];

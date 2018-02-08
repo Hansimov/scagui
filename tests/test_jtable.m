@@ -77,7 +77,7 @@ mtable.TooltipString = tooltip;
 
 jscrollpane = findjobj(mtable);
 jtable = jscrollpane.getViewport.getView;
-% uiinspect(jtable);
+uiinspect(jtable);
 % size(methods(jtable))
 
 % ------------------ Alignment START ------------------ %
@@ -259,6 +259,15 @@ a.setColumnChar();
 f2 = figure;
 ctext = uicontrol('Parent',f2,'Style','text','String','mytext');
 ctext.HorizontalAlignment = 'center';
+
+%%
+[mtable, buttons] = createTable;
+[mtable, buttons] = createTable(gcf,'column name');
+mtable = createTable([],{'a','b','c','d'},{false,1.3,uint16(45),'ert'; true,pi,uint16(-4),'defrgt'})
+mtable = createTable([],{'a','b','c','d'},magic(4),false,'AutoResizeMode',javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS)
+mtable = createTable([],{'rads','sin','cos'},[pi,sin(pi),cos(pi)],'SelectionMode',javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION)
+mtable = createTable('Data',magic(3), 'Headers',{'a','b','c'}, 'Buttons','off', 'Container',gcf);
+
 
 
 

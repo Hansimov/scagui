@@ -2,7 +2,7 @@
 % I use procedural programming instead of object-oriented programming currently.
 % This is because this project is under test.
 % I will change the code to oop paradigm afterwards.
-% Model-View-Controller pattern will be used.
+% Model-View-Controller paradigm will be used.
 % Why I name the labels and titles in Chinese? 
 % Because this software is for Chinese students.
 
@@ -29,21 +29,25 @@ hbox_top = uix.HBoxFlex('Parent',fig_top);
 vbox_tips = uix.VBoxFlex('Parent',hbox_top);
 vbox_plot = uix.VBoxFlex('Parent',hbox_top);
 
-% table_files = uitable(box_tips,'Units','normalized','Position',[0 0.7 1.0 0.3]);
-table_files = uitable('Parent',vbox_tips);
-table_files.ColumnName = {'选中','文件','类型','路径'};
-table_files.ColumnEditable = [true false false false];
-table_files.ColumnWidth = {30 140 60 'auto'};
-table_files.Data = file_pointer;
+table_files = Mtable('Parent',vbox_tips);
+table_files.m.ColumnName = {'选中','文件','类型','路径'};
+table_files.m.ColumnEditable = [true false false false];
+table_files.m.ColumnWidth = {30 140 60 'auto'};
+table_files.m.Data = file_pointer;
 
 % table_traceinfo = uitable( box_tips,'Units','normalized','Position',[0 0 1.0 0.7]);
-table_traceinfo = uitable('Parent',vbox_tips);
-table_traceinfo.ColumnName = {'属性','值'};
-table_traceinfo.ColumnWidth = {160 100};
-table_traceinfo.RowStriping = 'off';
-table_traceinfo.Data = {};
+% table_traceinfo = uitable('Parent',vbox_tips);
+% table_traceinfo.ColumnName = {'属性','值'};
+% table_traceinfo.ColumnWidth = {160 100};
+% table_traceinfo.RowStriping = 'off';
+% table_traceinfo.Data = {};
+table_traceinfo = Mtable('Parent',vbox_tips);
+table_traceinfo.m.ColumnName = {'属性','值'};
+table_traceinfo.m.ColumnWidth = {160 100};
+table_traceinfo.m.RowStriping = 'off';
+table_traceinfo.m.Data = {};
 
-table_files.CellSelectionCallback = {@table_cell_operation,table_traceinfo};
+table_files.m.CellSelectionCallback = {@table_cell_operation,table_traceinfo.m};
 % table_files.ButtonDownFcn = @fff;
 
 set( hbox_top, 'Widths', [-1 -2], 'Spacing', 5 );
@@ -54,7 +58,7 @@ menu_data = uimenu(fig_top,'Label', '数据');
 menu_analysis = uimenu(fig_top, 'Label', '分析');
 
 menu_file_new = uimenu(menu_file, 'Label', '新建');
-menu_file_import = uimenu(menu_file, 'Label', '导入','Callback',{@import_file,table_files});
+menu_file_import = uimenu(menu_file, 'Label', '导入','Callback',{@import_file,table_files.m});
 
 menu_data_filter = uimenu(menu_data, 'Label', '滤波');
 % menu_data_filter_lowpass = uimenu(menu_data_filter, 'Label', '低通');

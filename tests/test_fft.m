@@ -40,7 +40,8 @@ P1(2:end-1) = 2*P1(2:end-1);
 % The amplitudes are not exactly at 0.7 and 1, as expected, 
 %   because of the added noise.
 % On average, longer signals produce better frequency approximations.
-f = Fs*(0:(L/2))/L; % This line is important!
+
+f = Fs*(0:(L/2))/L; % This line determines the x-axis unit. Important!
 plot(f,P1);
 title('Single-Sided Amplitude Spectrum of X(t)');
 xlabel('f (Hz)');
