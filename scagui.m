@@ -29,26 +29,17 @@ hbox_top = uix.HBoxFlex('Parent',fig_top);
 vbox_tips = uix.VBoxFlex('Parent',hbox_top);
 vbox_plot = uix.VBoxFlex('Parent',hbox_top);
 
-table_files = Mtable('Parent',vbox_tips);
+table_files = Xuitable('Parent',vbox_tips);
 table_files.m.ColumnName = {'选中','文件','类型','路径'};
 table_files.m.ColumnEditable = [true false false false];
 table_files.m.ColumnWidth = {30 140 60 'auto'};
 table_files.m.Data = file_pointer;
 
-% table_traceinfo = uitable( box_tips,'Units','normalized','Position',[0 0 1.0 0.7]);
-% table_traceinfo = uitable('Parent',vbox_tips);
-% table_traceinfo.ColumnName = {'属性','值'};
-% table_traceinfo.ColumnWidth = {160 100};
-% table_traceinfo.RowStriping = 'off';
-% table_traceinfo.Data = {};
-table_traceinfo = Mtable('Parent',vbox_tips);
+table_traceinfo = Xuitable('Parent',vbox_tips);
 table_traceinfo.m.ColumnName = {'属性','值'};
 table_traceinfo.m.ColumnWidth = {160 100};
-table_traceinfo.m.RowStriping = 'off';
-table_traceinfo.m.Data = {};
-
 table_files.m.CellSelectionCallback = {@table_cell_operation,table_traceinfo.m};
-% table_files.ButtonDownFcn = @fff;
+
 
 set( hbox_top, 'Widths', [-1 -2], 'Spacing', 5 );
 set( vbox_tips, 'Heights', [-1 -2], 'Spacing', 5 );
@@ -75,17 +66,17 @@ tabgroup_plot = uitabgroup(vbox_plot);
 % sld = uicontrol('Style', 'slider','Min',1,'Max',100,'Value',100, 'SliderStep',[0.01 0.01], ...
 %                 'Units','normalized', 'Parent',box_plot,'Position', [0.98 0 0.1 1.0]); 
 tab_plot ={};
-tab_plot{1} = uitab(tabgroup_plot,'Title','原始');
-tab_plot{2} = uitab(tabgroup_plot,'Title','低通');
-tab_plot{3} = uitab(tabgroup_plot,'Title','对齐');
+tab_plot{1} = Xuitab(tabgroup_plot,'Title','原始');
+tab_plot{2} = Xuitab(tabgroup_plot,'Title','低通');
+tab_plot{3} = Xuitab(tabgroup_plot,'Title','对齐');
 
 global axes_plot1;
-axes_plot1 = axes(tab_plot{1});
-axes_plot2 = axes(tab_plot{2});
-axes_plot3 = axes(tab_plot{3});
+axes_plot1 = axes(tab_plot{1}.m);
+axes_plot2 = axes(tab_plot{2}.m);
+axes_plot3 = axes(tab_plot{3}.m);
 
 % This improves the redering performance remarkably!
-set(gcf, 'Renderer', 'painters');
+% set(gcf, 'Renderer', 'painters'); % While 3D plots, 'opengl' is much faster than 'painters'
 set(gcf, 'GraphicsSmoothing', 'off');
 set(gca, 'SortMethod','childorder');
 

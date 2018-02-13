@@ -4,14 +4,14 @@
 % It is not hard to put .m and .j methods together,
 %   but I still seperate the matlab handle and java handle,
 %   because this keeps the struct clearer.
-classdef Mtable < handle
+classdef Xuitable < handle
     properties
         m % matlab handle
         j % java   handle
     end
     
     methods
-        function obj = Mtable(varargin)
+        function obj = Xuitable(varargin)
             obj.m = uitable(varargin{:});
             jscrollpane = findjobj(obj.m);
             obj.j = jscrollpane.getViewport.getView;
@@ -37,6 +37,10 @@ classdef Mtable < handle
 %             obj.j.setColumnAutoResizable(true);
 %             obj.j.setDragEnabled(true);
 %             obj.j.sizeColumnsToFit(false);
+        end
+        function update(obj)
+            jscrollpane = findjobj(obj.m);
+            obj.j = jscrollpane.getViewport.getView;
         end
 
         function setColumnChar(obj)
