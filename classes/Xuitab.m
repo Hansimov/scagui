@@ -9,9 +9,7 @@ classdef Xuitab < handle
     methods
         function obj = Xuitab(varargin)
             obj.m = uitab(varargin{:});
-            disp('...')
-            close_icon =  javax.swing.ImageIcon( ...
-                'closebox.gif');
+            close_icon =  javax.swing.ImageIcon(which('closebox.gif'));
             jCloseButton = handle(javax.swing.JButton,'CallbackProperties');
             jCloseButton.setIcon(close_icon);
             jCloseButton.setPreferredSize(java.awt.Dimension(15,15));
@@ -19,14 +17,15 @@ classdef Xuitab < handle
             jCloseButton.setSize(java.awt.Dimension(15,15));
             
             set(jCloseButton, 'ActionPerformedCallback',{@close_tab,obj});
-            
-            jPanel = javax.swing.JPanel;	% default layout = FlowLayout
-            set(jPanel.getLayout, 'Hgap',0, 'Vgap',0);  % default gap = 5px
-            jLabel = javax.swing.JLabel('My Tab');
-            jPanel.add(jLabel);
-            jPanel.add(jCloseButton);
-            jTabGroup = findjobj('class','JTabbedPane');
-            jTabGroup.setTabComponentAt(0,jPanel);
+            global jPanel;
+            jPanel{end+1,1} = javax.swing.JPanel;	% default layout = FlowLayout
+            set(jPanel{end}.getLayout, 'Hgap',0, 'Vgap',0);  % default gap = 5px
+            jLabel = javax.swing.JLabel(obj.m.Title);
+            jPanel{end}.add(jLabel);
+            jPanel{end}.add(jCloseButton);
+%             global jTabGroup;
+            jTabGroup = findjobj('class','JTabbedPane','persist');
+            jTabGroup.setTabComponentAt(numel(jPanel)-1,jPanel{end});
             
         end
     end
@@ -35,6 +34,7 @@ end
 
 function close_tab(src,event,obj)
     disp(obj);
+    delete(obj.m);
     delete(obj);
 end
 

@@ -17,9 +17,10 @@ fig_top.MenuBar = 'None';
 
 % This is a temporary expedient. 
 % I will use handle later. Also rename this variable. 
-global file_container file_pointer;
+global file_container file_pointer jPanel;
 file_container = {};
 file_pointer = {};
+jPanel = {};
 
 %% Panel
 
@@ -59,12 +60,13 @@ menu_data_align = uimenu(menu_data, 'Label','对齐');
 menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 
 
-
 %% Plot
 
 tabgroup_plot = uitabgroup(vbox_plot);
-% sld = uicontrol('Style', 'slider','Min',1,'Max',100,'Value',100, 'SliderStep',[0.01 0.01], ...
-%                 'Units','normalized', 'Parent',box_plot,'Position', [0.98 0 0.1 1.0]); 
+
+global jTabGroup;
+jTabGroup = findjobj('class','JTabbedPane','persist');
+
 tab_plot ={};
 tab_plot{1} = Xuitab(tabgroup_plot,'Title','原始');
 tab_plot{2} = Xuitab(tabgroup_plot,'Title','低通');
@@ -74,6 +76,12 @@ global axes_plot1;
 axes_plot1 = axes(tab_plot{1}.m);
 axes_plot2 = axes(tab_plot{2}.m);
 axes_plot3 = axes(tab_plot{3}.m);
+
+% delete(tab_plot{1}.m);delete(tab_plot{1});
+% tab_plot(1) = [];
+% disp(tab_plot{1}.m.Title)
+% numel(tab_plot)
+
 
 % This improves the redering performance remarkably!
 % set(gcf, 'Renderer', 'painters'); % While 3D plots, 'opengl' is much faster than 'painters'

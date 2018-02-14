@@ -72,39 +72,4 @@ jPanel.add(jCloseButton2);
 jTabGroup = findjobj('class','JTabbedPane');
 % This line displays the icon.
 jTabGroup.setTabComponentAt(1,jPanel);	% Tab #1 = second tab
-%%
-import javax.swing.*
-import java.awt.*
-
-close all;
-figure;
-set(gcf,'MenuBar','None');
-hTabGroup = uitabgroup; 
-drawnow;
-tab1 = uitab(hTabGroup, 'title','Panel 1');
-a = axes('parent', tab1); 
-surf(peaks);
-tab2 = uitab(tab1.Parent,'title','Panel 2');
-% uiinspect(tab2);
-
-
-jcb1 = handle(javax.swing.JButton,'CallbackProperties');
-jcb1.setPreferredSize(java.awt.Dimension(15,15));
-jcb2 = handle(javax.swing.JButton,'CallbackProperties');
-jcb2.setPreferredSize(java.awt.Dimension(15,15));
-% jcb.setMaximumSize(java.awt.Dimension(15,15));
-% jcb.setSize(java.awt.Dimension(15,15));
-set(jcb1,'ActionPerformedCallback',@(h,e)delete(tab1));
-set(jcb2,'ActionPerformedCallback',@(h,e)delete(tab2));
-
-jp1 = JPanel;jp2 = JPanel;
-jlb1 = JLabel('tab1'); jlb2 = JLabel('tab2');
-jp1.add(jlb1); jp2.add(jlb2);
-jp1.add(jcb1);  jp2.add(jcb2);
-jtg = findjobj('class','JTabbedPane');
-jtg.setTabComponentAt(0,jp1);
-jtg.setTabComponentAt(1,jp2);
-
-
-% findjobj
 
