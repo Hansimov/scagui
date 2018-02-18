@@ -1,4 +1,4 @@
-function table_cell_operation(table_src,table_event,table_traceinfo)
+function tableOperation(table_src,table_event,table_traceinfo)
 % %     global file_info file_pointer file_entity;
     global file_container file_pointer;
     % When a cell is selected, it will cause an error when do other things.
@@ -20,34 +20,34 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
     set(table_traceinfo,'Data',file_container{row,1}.info);
     table_traceinfo.ColumnFormat = {'char' 'char'};
     
-    create_context();
+    creatContext();
 
-    function create_context()
+    function creatContext()
         if col == 2
             if strcmp(ext_part,'.trs')
-                uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convert_to_mat);
+                uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convertToMat);
             end
             if strcmp(ext_part,'.mat')
-                uimenu(ctmenu,'Label','查看曲线','Callback',@view_file);
+                uimenu(ctmenu,'Label','查看曲线','Callback',@viewFile);
             end
-            uimenu(ctmenu,'Label','删除对象','Callback',@delete_file);
+            uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
         elseif col == 4
-            uimenu(ctmenu,'Label','复制路径（包含文件名）','Callback',@copy_fullname);
-            uimenu(ctmenu,'Label','复制路径','Callback',@copy_dir);
+            uimenu(ctmenu,'Label','复制路径（包含文件名）','Callback',@copyFullname);
+            uimenu(ctmenu,'Label','复制路径','Callback',@copyDir);
         end
     end
-    function copy_fullname(~,~)
+    function copyFullname(~,~)
         disp(full_name);
     end
-    function copy_dir(~,~)
+    function copyDir(~,~)
         disp(path_part);
     end
 
-    function view_file(~,~)
+    function viewFile(~,~)
 %         global axes_plot1;
-        plot_trace(cell2mat(file_container{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
+        plotResult(cell2mat(file_container{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
     end
-    function delete_file(~,~)
+    function deleteFile(~,~)
 %         file_entity(row,:) = [];
 %         file_info(row,:) = [];
         file_container(row,:) = [];
@@ -56,7 +56,7 @@ function table_cell_operation(table_src,table_event,table_traceinfo)
         set(table_src, 'Data', file_pointer);
     end
     
-    function convert_to_mat(~,~)
+    function convertToMat(~,~)
         trs_fullname = full_name;
         [mat_filename,mat_pathname] = uiputfile('*.mat', '保存为...',[path_part filesep name_part]);
         if mat_filename ~=0

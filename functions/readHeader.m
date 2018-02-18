@@ -1,4 +1,4 @@
-function trs_info = read_header(fid)
+function trs_info = readHeader(fid)
 % A typical format of *.trs is TLV: Tag + Length + Value
 %
 % --------------------------------------------------------------------------------------------- %
@@ -106,7 +106,7 @@ function trs_info = read_header(fid)
                 trs_info.ns = {'Number of Samples',val};
             case '43'
                 trs_info.sc = {'Sample Coding',val};
-                [trs_info.st{2}, trs_info.ss{2}] = explain_sample_coding(trs_info.sc{2});
+                [trs_info.st{2}, trs_info.ss{2}] = parseSampleCoding(trs_info.sc{2});
             case '44'
                 val = hex2dec(val);
                 trs_info.ds = {'Data Size',val};
@@ -151,11 +151,11 @@ end
 % It doesn't matter. It doesn't affect the format conversion.
 function str = read_value(fid)
     len = fread(fid,1,'uint8');
-    str = read_n_times(fid,len);
+    str = readNTimes(fid,len);
 end
 
 % Once I wrote a complicated function, but now I know it was unnecessary.
-function str = read_n_times(fid,n)
+function str = readNTimes(fid,n)
     str = [];
     for i = 1:n
         % If n == 0, (in '5F') this won't be executed.
@@ -164,7 +164,7 @@ function str = read_n_times(fid,n)
     end
 end
 
-function [sample_type, sample_size] = explain_sample_coding(sample_coding)
+function [sample_type, sample_size] = parseSampleCoding(sample_coding)
     % Sample Coding: (trs_info.sc)
     %   0000 0001
     %   bit 8-6   reserved, set to '000'

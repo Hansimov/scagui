@@ -23,7 +23,7 @@ function [trs_info, canceled]= trs2mat(trs_filename, mat_filename)
         return
     end
 
-    trs_info = read_header(fid);
+    trs_info = readHeader(fid);
 
     % dec2hex(fread(fid,1,'uint8'),2)
     trace_num   = trs_info.nt{2};
@@ -57,12 +57,12 @@ function [trs_info, canceled]= trs2mat(trs_filename, mat_filename)
             break ;
         end
         waitbar(i/trace_num,progress_bar,sprintf('正在处理曲线： %05d / %05d',i,trace_num));
-        trs_data{i}   = read_data(fid,data_size);
+        trs_data{i}   = readData(fid,data_size);
         % Use () to assign values will convert its type to double,
         %   so I use {} to keep int8
         % Currently, this structure is most effecient.
 %         trs_sample(i,:) = read_sample(fid,sample_num,sample_type,sample_size); 
-        trs_sample{i} = read_sample(fid,sample_num,sample_type);
+        trs_sample{i} = readSample(fid,sample_num,sample_type);
     end
     
     canceled = getappdata(progress_bar,'canceling');
@@ -79,7 +79,7 @@ function [trs_info, canceled]= trs2mat(trs_filename, mat_filename)
 
 end
 
-function data = read_data(fid,data_size)
+function data = readData(fid,data_size)
     data = fread(fid,data_size,'uint8','b');
     data = dec2hex(data,2);
     data = num2cell(data);      % Seperate the characters
@@ -88,7 +88,7 @@ function data = read_data(fid,data_size)
     data = cat(2,data{:});      % Concatenate the characters
 end
 
-function sample = read_sample(fid,sample_num,sample_type)
+function sample = readSample(fid,sample_num,sample_type)
     sample = cast(fread(fid,sample_num,sample_type),sample_type);
     sample = sample';
 end

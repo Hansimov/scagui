@@ -38,21 +38,29 @@ classdef Xuitable < handle
 %             obj.j.setDragEnabled(true);
 %             obj.j.sizeColumnsToFit(false);
         end
-        function update(obj)
-            jscrollpane = findjobj(obj.m);
-            obj.j = jscrollpane.getViewport.getView;
-        end
+%         function update(obj)
+%             jscrollpane = findjobj(obj.m);
+%             obj.j = jscrollpane.getViewport.getView;
+%         end
 
         function setColumnChar(obj)
             colNum = obj.j.getColumnCount();
             obj.m.ColumnFormat = repmat({'char'},1,colNum);
         end
-        function setColumnAlignment(obj,alignType,varargin)
+        function setColumnAlignment(obj,align_type,varargin)
             if nargin == 2
                 disp(nargin);
             else
                 celldisp(varargin);
             end
+        end
+        function updateTable(obj,src,data)
+            row = data.Indices(1);
+            col = data.Indices(2);
+%             disp([row,col]);
+            global file_pointer;
+            file_pointer{row,1} = data.NewData;
+            obj.m.Data{row,col} = data.NewData;
         end
     end
     

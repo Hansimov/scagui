@@ -1,4 +1,4 @@
-function output_sample = down_sample( input_sample, down_rate)
+function output_sample = downSample(input_sample, down_rate)
 % Why I do not use the name of 'downsample'?
 % Because it is used by signal processing toolbox.
 %
