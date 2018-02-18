@@ -1,6 +1,6 @@
 function tableOperation(table_src,table_event,table_traceinfo)
-% %     global file_info file_pointer file_entity;
-    global file_container file_pointer;
+
+    global container;
     % When a cell is selected, it will cause an error when do other things.
     if isempty(table_event.Indices)
         return;
@@ -17,7 +17,7 @@ function tableOperation(table_src,table_event,table_traceinfo)
     path_part = cell_data{row,4};
     full_name = [path_part name_part ext_part];
 %     set(table_traceinfo,'Data',file_info{row,1});
-    set(table_traceinfo,'Data',file_container{row,1}.info);
+    set(table_traceinfo,'Data',container.files{row,1}.info);
     table_traceinfo.ColumnFormat = {'char' 'char'};
     
     creatContext();
@@ -44,16 +44,13 @@ function tableOperation(table_src,table_event,table_traceinfo)
     end
 
     function viewFile(~,~)
-%         global axes_plot1;
-        plotResult(cell2mat(file_container{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
+        plotResult(cell2mat(container.files{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
     end
     function deleteFile(~,~)
-%         file_entity(row,:) = [];
-%         file_info(row,:) = [];
-        file_container(row,:) = [];
-        file_pointer(row,:) = [];
+        container.files(row,:) = [];
+        container.file_pointers(row,:) = [];
         set(table_traceinfo,'Data',{});
-        set(table_src, 'Data', file_pointer);
+        set(table_src, 'Data', container.file_pointers);
     end
     
     function convertToMat(~,~)
@@ -71,10 +68,10 @@ function tableOperation(table_src,table_event,table_traceinfo)
              switch file_open_choice
                  case 'ÊÇ'
                      [mat_path_part,mat_name_part,mat_ext_part] = fileparts(mat_fullname);
-                     file_pointer(end+1,1:4) = {false,mat_name_part,mat_ext_part,mat_pathname};
-                     file_container{end+1,1} = TraceFile(mat_fullname);
+                     container.file_pointers(end+1,1:4) = {false,mat_name_part,mat_ext_part,mat_pathname};
+                     container.files{end+1,1} = TraceFile(mat_fullname);
 %                      file_info{end+1,1} = get_trs_info(full_name);
-                     set(table_src,'Data',file_pointer);
+                     set(table_src,'Data',container.file_pointers);
                  case '·ñ'
                  otherwise
              end

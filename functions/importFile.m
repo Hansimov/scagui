@@ -1,5 +1,5 @@
 function importFile(src,event,table_files)
-    global file_container file_pointer;
+    global container;
     [filename, pathname, ~] = uigetfile( ...
         {...   
         '*.mat;*.trs','所有数据类型';...
@@ -29,9 +29,9 @@ function importFile(src,event,table_files)
     for i = 1:numel(filename)
         full_name = [pathname filename{i}];
         [path_part,name_part,ext_part] = fileparts(full_name);
-        file_container{end+1,1} = TraceFile(full_name);
-        file_pointer(end+1,1:4) = {false,name_part,ext_part,pathname};
+        container.files{end+1,1} = TraceFile(full_name);
+        container.file_pointers(end+1,1:4) = {false,name_part,ext_part,pathname};
     end
 
-    set(table_files,'Data',file_pointer);
+    set(table_files,'Data',container.file_pointers);
 end

@@ -17,14 +17,14 @@ fig_top.MenuBar = 'None';
 
 % This is a temporary expedient. 
 % I will use handle later. Also rename this variable. 
-% global container;
-% container = GlobalContainer;
-global file_container file_pointer panel_container tab_container filter_container;
-file_container = {};
-file_pointer = {};
-panel_container = {};
-tab_container = {};
-filter_container = {};
+global container;
+container = GlobalContainer;
+% global file_container file_pointer panel_container tab_container filter_container;
+% file_container = {};
+% file_pointer = {};
+% panel_container = {};
+% tab_container = {};
+% filter_container = {};
 
 %% Panel
 
@@ -38,7 +38,7 @@ table_files = Xuitable('Parent',vbox_tips);
 table_files.m.ColumnName = {'选中','文件','类型','路径'};
 table_files.m.ColumnEditable = [true false false false];
 table_files.m.ColumnWidth = {35 100 60 100};
-table_files.m.Data = file_pointer;
+table_files.m.Data = container.file_pointers;
 table_files.m.CellEditCallback = @table_files.updateTable;
 
 table_traceinfo = Xuitable('Parent',vbox_tips);
@@ -66,8 +66,7 @@ menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
 
 
 %% Plot
-global tabgroup_plot;
-tabgroup_plot = uitabgroup(vbox_plot);
+container.tabgroup = uitabgroup(vbox_plot);
 
 % global jTabGroup;
 % jTabGroup = findjobj('class','JTabbedPane','persist');

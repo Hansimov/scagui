@@ -8,12 +8,12 @@ function plotResult(sample, varargin)
         unitx = varargin{1};
         unity = varargin{2};
     end
-    global tab_container tabgroup_plot;
+    global container;
     t = 1:size(sample,2);
     x = t * unitx;
     y = double(sample) * unity;
-    tab_container{end+1,1} = Xuitab(tabgroup_plot,'Title','ԭʼ');
-    current_axes = axes(tab_container{end,1}.m);
+    container.tabs{end+1,1} = Xuitab(container.tabgroup,'Title','ԭʼ');
+    current_axes = axes(container.tabs{end,1}.m);
     plot(current_axes,x,y);
     current_axes.XLabel.String='S';
     current_axes.YLabel.String='V';

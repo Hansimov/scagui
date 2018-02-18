@@ -2,12 +2,13 @@ classdef GlobalContainer < handle
 % This function is to wrap the global variables.
     properties (SetObservable, AbortSet)
         file_pointers = {};
-        file_info = {};
+        files = {};
         panels = {};
         tabs = {};
         traces_original = {};
         traces_downsample = {};
         traces_filter = {};
+        tabgroup
         current_file = {};
         current_tab = {};
         current_trace = {};
@@ -21,18 +22,14 @@ classdef GlobalContainer < handle
     
     methods
         function attachListener(obj)
-            addlistener(obj,'type','PostSet',@Containers.updateType);
+%             addlistener(obj,'tabs','PostSet',@Containers.updateType);
         end
     end
     
-    methods (Static)
-        function updateType(src,data)
-            obj = data.AffectedObject;
-%             propName = src.Name;
-            type = obj.type;                    
-        end
-    
-    end
+%     methods (Static)
+%         function updateType(src,data)      
+%         end
+%     end
 end
 
 

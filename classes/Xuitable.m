@@ -58,8 +58,8 @@ classdef Xuitable < handle
             row = data.Indices(1);
             col = data.Indices(2);
 %             disp([row,col]);
-            global file_pointer;
-            file_pointer{row,1} = data.NewData;
+            global container;
+            container.file_pointers{row,1} = data.NewData;
             obj.m.Data{row,col} = data.NewData;
         end
     end
