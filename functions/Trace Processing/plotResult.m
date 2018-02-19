@@ -14,6 +14,8 @@ function plotResult(sample, varargin)
     y = double(sample) * unity;
     container.tabs{end+1,1} = Xuitab(container.tabgroup,'Title','ԭʼ');
     current_axes = axes(container.tabs{end,1}.m);
+%     getpixelposition(container.tabs{end,1}.m)
+
     plot(current_axes,x,y);
     current_axes.XLabel.String='S';
     current_axes.YLabel.String='V';

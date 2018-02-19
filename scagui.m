@@ -15,16 +15,8 @@ fig_top = figure('Name','SCA Master', 'NumberTitle','off', 'Position',[100 100 1
 fig_top.MenuBar = 'None';
 % fig_top.Renderer = 'painters';
 
-% This is a temporary expedient. 
-% I will use handle later. Also rename this variable. 
 global container;
 container = GlobalContainer;
-% global file_container file_pointer panel_container tab_container filter_container;
-% file_container = {};
-% file_pointer = {};
-% panel_container = {};
-% tab_container = {};
-% filter_container = {};
 
 %% Panel
 
