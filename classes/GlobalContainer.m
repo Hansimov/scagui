@@ -3,7 +3,6 @@ classdef GlobalContainer < handle
     properties (SetObservable, AbortSet)
         file_pointers = {};
         files = {};
-        panels = {};
         tabs = {};
         traces_original = {};
         traces_downsample = {};
@@ -12,6 +11,7 @@ classdef GlobalContainer < handle
         current_file = {};
         current_tab = {};
         current_trace = {};
+        
     end
     
     methods

@@ -44,7 +44,7 @@ function tableOperation(table_src,table_event,table_traceinfo)
     end
 
     function viewFile(~,~)
-        plotResult(cell2mat(container.files{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
+%         plotResult(cell2mat(container.files{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
     end
     function deleteFile(~,~)
         container.files(row,:) = [];

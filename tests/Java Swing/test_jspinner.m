@@ -29,11 +29,13 @@ mspinner.Parent = vbox;
 % jspinner.setMaximumSize(Dimension(50,10));
 
 %%
+% https://undocumentedmatlab.com/blog/using-spinners-in-matlab-gui#comment-419234
 import javax.swing.*
 import java.awt.*
 f = figure;
 
-fpos = getpixelposition(f);
+sm = SpinnerNumberModel(10, 0,20, 1); % default, min, max, step
+js = JSpinner(sm);
 [jspinner, mspinner] = javacomponent(js);
 mspinner.Parent = f;
 fpos = getpixelposition(f);
@@ -42,13 +44,25 @@ mspinner.Position = [fpos(3)*0.8 fpos(4)*0.8 50 25];
 updateSpinnerPostion = [ ...
     'fpos = getpixelposition(f);' newline ...
     'mspinner.Position = [0.8*fpos(3) 0.8*fpos(4) 50 25];'...
-    ]; 
-% disp(updateSpinnerPostion);
+    ];
 f.ResizeFcn = updateSpinnerPostion;
-
+% hspinner = handle(js, 'CallbackProperties');
+% set(jspinner, 'VetoableChangeCallback', 'disp(jspinner.getValue)');
+set(jspinner,'StateChangedCallback', 'disp(jspinner.getValue)');
+% set(jspinner,'StateChangedCallback', 'disp([jspinner.getPreviousValue jspinner.getValue])');
+% tmp = 0;
+% set(jspinner,'StateChangedCallback', ...
+%     'if tmp~=jspinner.getValue;disp(tmp);tmp = jspinner.getValue; end');
 
 
 %%
-function updateSpinnerPostion()
-    
-end
+
+% <<matlab-java programming>> chapter 3.4
+import javax.swing.*
+
+f = figure;
+jb=javax.swing.JButton;
+javacomponent(jb);
+jbh = handle(jb, 'CallbackProperties') ; 
+set(jb,'ActionPerformedCallback','disp(123)') % ok
+
