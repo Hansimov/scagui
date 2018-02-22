@@ -7,27 +7,28 @@ classdef Xuitab < handle
     properties (SetObservable, AbortSet)
         m
         index
-        type
         panel
-        axes
+        plots
+        type
+        file % file related to the current xuitab
     end
     
     methods
         function obj = Xuitab(varargin)
             obj.m = uitab(varargin{:});
             obj.attachListenners();
-       
+            
             jCloseButton = obj.createCloseIcon();
             obj.createJPanel();
             obj.addCloseIcon(jCloseButton);
-            obj.createSpinner();
+%             obj.createSpinner();
+%             obj.createPlots();
         end
-
     end
     
     methods (Access = private)
         function attachListenners(obj)
-            addlistener(obj,'type','PostSet',@obj.updateType);
+            addlistener(obj,'type','PostSet',@obj.createPlots);
         end
         
         function jCloseButton = createCloseIcon(obj)
@@ -53,40 +54,17 @@ classdef Xuitab < handle
             global container;
             obj.panel.add(jCloseButton);
             jTabGroup = findjobj('class','JTabbedPane','persist');
-            numel(container.tabs)
             jTabGroup.setTabComponentAt(numel(container.tabs),obj.panel);
             % Why I do not use numel(container.tabs)-1? 
             % Because current Xuitab object has not been added to the container.tabs.
         end
         
-        function createSpinner(obj)
-            sm = javax.swing.SpinnerNumberModel(1,1,100,1); % default, min, max, step
-            js = javax.swing.JSpinner(sm);
-            [jspinner, mspinner] = javacomponent(js);
-            current_tab = obj.m;
-            mspinner.Parent = current_tab;
-            tabpos = getpixelposition(obj.m);
-            mspinner.Position = [tabpos(3)*0.85 tabpos(4)*0.95 60 20];
-            current_tab.SizeChangedFcn = {@updateSpinnerPosition, mspinner};
-            
-            set(jspinner,'StateChangedCallback',{@updatePlotResult,obj.index});
+        function createPlots(obj,src,data)
+            obj.plots = Plots(obj);
         end
-        
-%         function createAxes(obj)
-%             
-%         end
         
     end
     
-    methods % (Static)
-        function updateType(obj,src,data)
-%             disp(obj.type);
-%             switch lower(src.type)
-%                 case 'original'
-%                     
-%             end
-        end
-    end
 end
 
 
@@ -112,17 +90,6 @@ function updateTabIndex(current_tab_index)
     end
 end
 
-function updateSpinnerPosition(current_tab,event,mspinner)
-    tabpos = getpixelposition(current_tab);
-    mspinner.Position = [tabpos(3)*0.85 tabpos(4)*0.95 60 20];    
-end
 
-function updatePlotResult(src,data,current_tab_index)
-    current_trace_index = src.getValue
-%     plotTrace(current_trace_index);
-end
 
-function plotTrace()
-    
-end
 

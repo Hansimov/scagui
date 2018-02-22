@@ -17,7 +17,7 @@ function tableOperation(table_src,table_event,table_traceinfo)
     path_part = cell_data{row,4};
     full_name = [path_part name_part ext_part];
 %     set(table_traceinfo,'Data',file_info{row,1});
-    set(table_traceinfo,'Data',container.files{row,1}.info);
+    set(table_traceinfo,'Data',container.files{row}.info);
     table_traceinfo.ColumnFormat = {'char' 'char'};
     
     creatContext();
@@ -45,6 +45,9 @@ function tableOperation(table_src,table_event,table_traceinfo)
 
     function viewFile(~,~)
 %         plotResult(cell2mat(container.files{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
+        container.tabs{end+1} = Xuitab(container.tabgroup,'Title',num2str(numel(container.tabs)));
+        container.tabs{end}.file = container.files{row}; % This line should be put before the below.
+        container.tabs{end}.type = 'original';
     end
     function deleteFile(~,~)
         container.files(row,:) = [];

@@ -29,7 +29,8 @@ function importFile(src,event,table_files)
     for i = 1:numel(filename)
         full_name = [pathname filename{i}];
         [path_part,name_part,ext_part] = fileparts(full_name);
-        container.files{end+1,1} = TraceFile(full_name);
+        container.files{end+1} = TraceFile(full_name);
+        container.files{end}.index = numel(container.files);
         container.file_pointers(end+1,1:4) = {false,name_part,ext_part,pathname};
     end
 

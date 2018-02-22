@@ -1,5 +1,5 @@
 classdef GlobalContainer < handle
-% This function is to wrap the global variables.
+% This class is to wrap the global variables.
     properties (SetObservable, AbortSet)
         file_pointers = {};
         files = {};

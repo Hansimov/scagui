@@ -20,8 +20,6 @@ container = GlobalContainer;
 
 %% Panel
 
-% box_tips = uipanel(fig_top, 'Title','信息栏','FontSize',10,'Position',[0 0.3 0.3 0.7]);
-% box_plot = uipanel(fig_top,'Title','绘制区', 'FontSize',10,'Position',[0.3 0.3 0.7 0.7]);
 hbox_top = uix.HBoxFlex('Parent',fig_top);
 vbox_tips = uix.VBoxFlex('Parent',hbox_top);
 vbox_plot = uix.VBoxFlex('Parent',hbox_top);
@@ -62,22 +60,6 @@ container.tabgroup = uitabgroup(vbox_plot);
 
 % global jTabGroup;
 % jTabGroup = findjobj('class','JTabbedPane','persist');
-
-% tab_plot ={};
-% tab_plot{1} = Xuitab(tabgroup_plot,'Title','原始');
-% tab_plot{2} = Xuitab(tabgroup_plot,'Title','低通');
-% tab_plot{3} = Xuitab(tabgroup_plot,'Title','对齐');
-
-% global axes_plot1;
-% axes_plot1 = axes(tab_plot{1}.m);
-% axes_plot2 = axes(tab_plot{2}.m);
-% axes_plot3 = axes(tab_plot{3}.m);
-
-% delete(tab_plot{1}.m);delete(tab_plot{1});
-% tab_plot(1) = [];
-% disp(tab_plot{1}.m.Title)
-% numel(tab_plot)
-
 
 % This improves the redering performance remarkably!
 % set(gcf, 'Renderer', 'painters'); % While 3D plots, 'opengl' is much faster than 'painters'
