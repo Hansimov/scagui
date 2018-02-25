@@ -4,13 +4,11 @@ classdef GlobalContainer < handle
         file_pointers = {};
         files = {};
         tabs = {};
-        traces_original = {};
-        traces_downsample = {};
-        traces_filter = {};
+        traces = {}; % Contain traces processed
         tabgroup
-        current_file = {};
-        current_tab = {};
-        current_trace = {};
+%         current_file;
+%         current_tab;
+%         current_trace;
         
     end
     

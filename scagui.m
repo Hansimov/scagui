@@ -24,12 +24,26 @@ hbox_top = uix.HBoxFlex('Parent',fig_top);
 vbox_tips = uix.VBoxFlex('Parent',hbox_top);
 vbox_plot = uix.VBoxFlex('Parent',hbox_top);
 
-table_files = Xuitable('Parent',vbox_tips);
+tabgroup_variables = uitabgroup('Parent',vbox_tips);
+
+tab_files = uitab(tabgroup_variables,'Title','文件');
+tab_traces = uitab(tabgroup_variables, 'Title','曲线');
+
+vbox_files = uix.VBoxFlex('Parent',tab_files);
+table_files = Xuitable('Parent',vbox_files);
 table_files.m.ColumnName = {'选中','文件','类型','路径'};
 table_files.m.ColumnEditable = [true false false false];
 table_files.m.ColumnWidth = {35 100 60 100};
 table_files.m.Data = container.file_pointers;
 table_files.m.CellEditCallback = @table_files.updateTable;
+
+vbox_traces = uix.VBoxFlex('Parent',tab_traces);
+table_traces = Xuitable('Parent',vbox_traces);
+table_traces.m.ColumnName = {'选中','变量','类型'};
+table_traces.m.ColumnWidth = {35 100 60};
+table_traces.m.ColumnEditable = [true false false];
+
+
 
 table_traceinfo = Xuitable('Parent',vbox_tips);
 table_traceinfo.m.ColumnName = {'属性','值'};

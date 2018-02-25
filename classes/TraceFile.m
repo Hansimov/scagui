@@ -27,7 +27,6 @@ classdef TraceFile < handle
             obj.createStatus();
         end
         function sample_out = downsample(obj,down_rate)
-%             trace_num = obj.info.nt{2};
             sample_out = {};
             for i = 1:obj.trace_num
                 sample_vec = cell2mat(obj.entity.trs_sample(1,1));
@@ -40,7 +39,7 @@ classdef TraceFile < handle
         end
         function createStatus(obj)
             status_cell = {'isDownsampled','isLowpassed','isAligned'};
-            for i = 1:3
+            for i = 1:numel(status_cell)
                 if ~isfield(obj.status,status_cell{i})
                     eval(['obj.status.' status_cell{i} '= false;'])
                 end

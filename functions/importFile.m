@@ -35,4 +35,6 @@ function importFile(src,event,table_files)
     end
 
     set(table_files,'Data',container.file_pointers);
+%     table_files.Position(3:4) = table_files.Extent(3:4);
+%     container.traces{end+1} = 
 end

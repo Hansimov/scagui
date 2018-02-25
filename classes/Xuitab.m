@@ -53,7 +53,8 @@ classdef Xuitab < handle
         function addCloseIcon(obj,jCloseButton)
             global container;
             obj.panel.add(jCloseButton);
-            jTabGroup = findjobj('class','JTabbedPane','persist');
+            jTabGroup = findjobj(container.tabgroup,'class','JTabbedPane','persist');
+%             jTabGroup = handle(jTabGroup,'CallbackProperties');
             jTabGroup.setTabComponentAt(numel(container.tabs),obj.panel);
             % Why I do not use numel(container.tabs)-1? 
             % Because current Xuitab object has not been added to the container.tabs.
@@ -77,7 +78,6 @@ function closeTab(src,event,obj)
     % The line above should be over the two lines below.
     % If the cell element which represents the current tab is assign empty first,
     %   update tab index should begin from current_tab_index, instead of current_tab_index+1
-%     container.panels(current_tab_index) = [];
     container.tabs(current_tab_index) = [];
     delete(obj.m);
     delete(obj);

@@ -29,7 +29,7 @@ classdef Plots < handle
         function plotOriginalTrace(obj)
             tab = obj.parent;
             obj.ax = axes(tab.m);
-            [obj.jspinner, obj.mspinner] = createSpinner(tab);
+            [obj.jspinner, obj.mspinner] = createSpinner(obj.ax,tab);
         end
         
         function plotDownsampledTrace(obj)
@@ -44,7 +44,7 @@ classdef Plots < handle
     
 end
 
-function [jspinner,mspinner] = createSpinner(xuitab)
+function [jspinner,mspinner] = createSpinner(ax,xuitab)
     trace_num = xuitab.file.trace_num;
     sm = javax.swing.SpinnerNumberModel(1,1,trace_num,1); % default, min, max, step
     js = javax.swing.JSpinner(sm);
@@ -55,7 +55,7 @@ function [jspinner,mspinner] = createSpinner(xuitab)
     mspinner.Position = [tabpos(3)*0.85 tabpos(4)*0.95 60 20];
 
     set(current_tab,'SizeChangedFcn', {@updateSpinnerPosition, mspinner});
-    set(jspinner,'StateChangedCallback',{@updatePlots,xuitab});
+    set(jspinner,'StateChangedCallback',{@updatePlots,ax,xuitab});
 end
 
 
@@ -64,11 +64,11 @@ function updateSpinnerPosition(current_tab,event,mspinner)
     mspinner.Position = [tabpos(3)*0.85 tabpos(4)*0.95 60 20];    
 end
 
-function updatePlots(src,data,xuitab)
+function updatePlots(src,data,ax,xuitab)
     global container;
     current_trace_index = src.getValue;
     current_file_index = xuitab.file.index;
-    plot(cell2mat(container.files{current_file_index}.entity.trs_sample(current_trace_index,1)));
+    plot(ax,cell2mat(container.files{current_file_index}.entity.trs_sample(current_trace_index,1)));
 end
 
 
