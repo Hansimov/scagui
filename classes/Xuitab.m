@@ -16,7 +16,7 @@ classdef Xuitab < handle
     methods
         function obj = Xuitab(varargin)
             obj.m = uitab(varargin{:});
-            obj.attachListenners();
+            obj.addListeners();
             
             jCloseButton = obj.createCloseIcon();
             obj.createJPanel();
@@ -27,7 +27,7 @@ classdef Xuitab < handle
     end
     
     methods (Access = private)
-        function attachListenners(obj)
+        function addListeners(obj)
             addlistener(obj,'type','PostSet',@obj.createPlots);
         end
         

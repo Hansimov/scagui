@@ -1,4 +1,4 @@
-function tableOperation(table_src,table_event,table_traceinfo)
+function tableOperation(table_src,table_event,table_of_traceinfo)
 
     global container;
     % When a cell is selected, it will cause an error when do other things.
@@ -14,34 +14,35 @@ function tableOperation(table_src,table_event,table_traceinfo)
     cell_data = get(table_src, 'Data');
     name_part = cell_data{row,2};
     ext_part = cell_data{row,3};
-    path_part = cell_data{row,4};
+%     path_part = cell_data{row,4};
     full_name = [path_part name_part ext_part];
 %     set(table_traceinfo,'Data',file_info{row,1});
-    set(table_traceinfo,'Data',container.files{row}.info);
-    table_traceinfo.ColumnFormat = {'char' 'char'};
+    set(table_of_traceinfo,'Data',container.files{row}.info);
+    table_of_traceinfo.ColumnFormat = {'char' 'char'};
     
-    creatContext();
+    createContext();
 
-    function creatContext()
-        if col == 2
-            if strcmp(ext_part,'.trs')
-                uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convertToMat);
-            end
-            if strcmp(ext_part,'.mat')
-                uimenu(ctmenu,'Label','查看曲线','Callback',@viewFile);
-            end
-            uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
-        elseif col == 4
-            uimenu(ctmenu,'Label','复制路径（包含文件名）','Callback',@copyFullname);
-            uimenu(ctmenu,'Label','复制路径','Callback',@copyDir);
-        end
+    function createContext()
+        container.files{row}.createContextMenu;
+%         if col == 2
+%             if strcmp(ext_part,'.trs')
+%                 uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convertToMat);
+%             end
+%             if strcmp(ext_part,'.mat')
+%                 uimenu(ctmenu,'Label','查看曲线','Callback',@viewFile);
+%             end
+%             uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
+%         elseif col == 4
+%             uimenu(ctmenu,'Label','复制路径（包含文件名）','Callback',@copyFullname);
+%             uimenu(ctmenu,'Label','复制路径','Callback',@copyDir);
+%         end
     end
-    function copyFullname(~,~)
-        disp(full_name);
-    end
-    function copyDir(~,~)
-        disp(path_part);
-    end
+%     function copyFullname(~,~)
+%         disp(full_name);
+%     end
+%     function copyDir(~,~)
+%         disp(path_part);
+%     end
 
     function viewFile(~,~)
 %         plotResult(cell2mat(container.files{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
@@ -52,7 +53,7 @@ function tableOperation(table_src,table_event,table_traceinfo)
     function deleteFile(~,~)
         container.files(row,:) = [];
         container.file_pointers(row,:) = [];
-        set(table_traceinfo,'Data',{});
+        set(table_of_traceinfo,'Data',{});
         set(table_src, 'Data', container.file_pointers);
     end
     

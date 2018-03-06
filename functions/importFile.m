@@ -1,4 +1,4 @@
-function importFile(src,event,table_files)
+function importFile(src,event,table_of_fileinfo)
     global container;
     [filename, pathname, ~] = uigetfile( ...
         {...   
@@ -31,10 +31,11 @@ function importFile(src,event,table_files)
         [path_part,name_part,ext_part] = fileparts(full_name);
         container.files{end+1} = TraceFile(full_name);
         container.files{end}.index = numel(container.files);
-        container.file_pointers(end+1,1:4) = {false,name_part,ext_part,pathname};
+%         container.file_pointers(end+1,1:4) = {false,name_part,ext_part,pathname};
+        container.file_pointers(end+1,1:3) = {false,name_part,ext_part};
     end
 
-    set(table_files,'Data',container.file_pointers);
+    set(table_of_fileinfo,'Data',container.file_pointers);
 %     table_files.Position(3:4) = table_files.Extent(3:4);
 %     container.traces{end+1} = 
 end

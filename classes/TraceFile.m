@@ -6,6 +6,8 @@ classdef TraceFile < handle
         ext
         info          % Cell type
         trs_info      % Struct type
+        trs_data
+        trs_samples
         entity
         trace_num
         sample_num
@@ -14,18 +16,32 @@ classdef TraceFile < handle
     end
 
     methods
-        function obj = TraceFile(fullpath)
+        function obj = TraceFile(varargin)
+            if isempty(varargin)
+            else
+                fullpath = varargin{1};
+                obj.initialize(fullpath);
+            end
+            obj.createStatus();
+        end
+        
+        function initialize(obj,fullpath)
             obj.fullpath = fullpath;
             [obj.dir, obj.name, obj.ext] = fileparts(fullpath);
-            obj.info = getTrsInfo(fullpath);
             if isequal(obj.ext,'.mat')
                 obj.entity = matfile(fullpath);
             end
+            obj.info = getTrsInfo(fullpath);
             obj.trs_info = obj.entity.trs_info;
             obj.trace_num = obj.trs_info.nt{2};
             obj.sample_num = obj.trs_info.ns{2};
-            obj.createStatus();
+
         end
+        
+        function createContextMenu(obj)
+            disp('hellp');
+        end
+        
         function sample_out = downsample(obj,down_rate)
             sample_out = {};
             for i = 1:obj.trace_num
@@ -33,10 +49,13 @@ classdef TraceFile < handle
                 sample_out{i} = downSample(sample_vec,down_rate);
             end
         end
+        
         function sample_out = lowpass(obj,cutoff_freq)
         end
+        
         function sample_out = align(obj,base_trace)
         end
+        
         function createStatus(obj)
             status_cell = {'isDownsampled','isLowpassed','isAligned'};
             for i = 1:numel(status_cell)
