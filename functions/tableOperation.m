@@ -1,6 +1,6 @@
-function tableOperation(table_src,table_event,table_of_traceinfo)
+function tableOperation(table_src, table_event)
 
-    global container;
+    global comps vars;
     % When a cell is selected, it will cause an error when do other things.
     if isempty(table_event.Indices)
         return;
@@ -10,79 +10,24 @@ function tableOperation(table_src,table_event,table_of_traceinfo)
     col = table_event.Indices(2);
     ctmenu = uicontextmenu;
     table_src.UIContextMenu = ctmenu;
-
-    cell_data = get(table_src, 'Data');
-    name_part = cell_data{row,2};
-    ext_part = cell_data{row,3};
+    
+    current_fileinfo = vars.files{row}.info;
+%     disp(cell_data);
+%     cell_data = get(table_src, 'Data');
+%     name_part = cell_data{row,2};
+%     ext_part = cell_data{row,3};
 %     path_part = cell_data{row,4};
-    full_name = [path_part name_part ext_part];
-%     set(table_traceinfo,'Data',file_info{row,1});
-    set(table_of_traceinfo,'Data',container.files{row}.info);
-    table_of_traceinfo.ColumnFormat = {'char' 'char'};
+%     full_name = [path_part name_part ext_part];
+
+    set(comps.table.traceinfo.m,'Data', current_fileinfo);
+    comps.table.traceinfo.m.ColumnFormat = {'char' 'char'};
     
-    createContext();
+    createContext(ctmenu);
 
-    function createContext()
-        container.files{row}.createContextMenu;
-%         if col == 2
-%             if strcmp(ext_part,'.trs')
-%                 uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@convertToMat);
-%             end
-%             if strcmp(ext_part,'.mat')
-%                 uimenu(ctmenu,'Label','查看曲线','Callback',@viewFile);
-%             end
-%             uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
-%         elseif col == 4
-%             uimenu(ctmenu,'Label','复制路径（包含文件名）','Callback',@copyFullname);
-%             uimenu(ctmenu,'Label','复制路径','Callback',@copyDir);
-%         end
-    end
-%     function copyFullname(~,~)
-%         disp(full_name);
-%     end
-%     function copyDir(~,~)
-%         disp(path_part);
-%     end
+    function createContext(ctmenu)
+        vars.files{row}.createContextMenu(ctmenu);
 
-    function viewFile(~,~)
-%         plotResult(cell2mat(container.files{row,1}.entity.trs_sample(1,1)), 1e-8, 0.005);
-        container.tabs{end+1} = Xuitab(container.tabgroup,'Title',num2str(numel(container.tabs)));
-        container.tabs{end}.file = container.files{row}; % This line should be put before the below.
-        container.tabs{end}.type = 'original';
     end
-    function deleteFile(~,~)
-        container.files(row,:) = [];
-        container.file_pointers(row,:) = [];
-        set(table_of_traceinfo,'Data',{});
-        set(table_src, 'Data', container.file_pointers);
-    end
-    
-    function convertToMat(~,~)
-        trs_fullname = full_name;
-        [mat_filename,mat_pathname] = uiputfile('*.mat', '保存为...',[path_part filesep name_part]);
-        if mat_filename ~=0
-            mat_fullname = [mat_pathname,mat_filename];
-        else
-            return;
-        end
-         [~,canceled] = trs2mat(trs_fullname,mat_fullname);
-         if ~canceled
-             file_open_choice = questdlg('文件保存成功，是否在软件中打开？', '', ...
-                                        '是','否','是');
-             switch file_open_choice
-                 case '是'
-                     [mat_path_part,mat_name_part,mat_ext_part] = fileparts(mat_fullname);
-                     container.file_pointers(end+1,1:4) = {false,mat_name_part,mat_ext_part,mat_pathname};
-                     container.files{end+1,1} = TraceFile(mat_fullname);
-%                      file_info{end+1,1} = get_trs_info(full_name);
-                     set(table_src,'Data',container.file_pointers);
-                 case '否'
-                 otherwise
-             end
-         end
-    end
-
-
 
 end
 

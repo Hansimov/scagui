@@ -12,25 +12,25 @@ properties (SetObservable, AbortSet)
 end
     
 methods
-    function obj = GlobalContainer()
+    function obj = VariablesContainer()
         obj.addListeners;
     end
 end
-    
+
 methods
     function addListeners(obj)
-        addlistener(obj,'files','PostSet',@obj.updateFileinfo);
-        %             addlistener(obj,'tabs','PostSet',@Containers.updateType);
+        addlistener(obj,'fileinfo','PostSet',@obj.updateFileinfo);
+        addlistener(obj,'files','PostSet',@obj.updateFiles);
     end
-    function updateFileinfo(obj)
-        obj.fileinfo
+    
+    function updateFileinfo(obj,src,event)
+        global comps;
+        set(comps.table.fileinfo.m, 'Data', obj.fileinfo);
+    end
+    function updateFiles(obj,src,event)
     end
 end
 
-%     methods (Static)
-%         function updateType(src,data)      
-%         end
-%     end
 end
 
 

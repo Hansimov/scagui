@@ -1,13 +1,11 @@
-function importFile(src,event,table_of_fileinfo)
-    global container;
-    [filename, pathname, ~] = uigetfile( ...
-        {...   
-        '*.mat;*.trs','所有数据类型';...
-        '*.mat','MAT 格式 (*.mat)'; ...
-        '*.trs','trs 格式 (*.trs)'; ...
-        '*.*',  '所有文件 (*.*)'}, ...
-        '选择文件', ...
-        'MultiSelect', 'on');
+function importFile(src,event)
+    global vars;
+    [filename, pathname, ~] = uigetfile( { '*.mat;*.trs','所有数据类型';...
+                                           '*.mat','MAT 格式 (*.mat)'; ...
+                                           '*.trs','trs 格式 (*.trs)'; ...
+                                           '*.*',  '所有文件 (*.*)'}, ...
+                                           '选择文件', ...
+                                           'MultiSelect', 'on');
 
     % If cancel the open window, filename and pathname will be 0 (double);
     if isequal(filename, 0)
@@ -29,13 +27,10 @@ function importFile(src,event,table_of_fileinfo)
     for i = 1:numel(filename)
         full_name = [pathname filename{i}];
         [path_part,name_part,ext_part] = fileparts(full_name);
-        container.files{end+1} = TraceFile(full_name);
-        container.files{end}.index = numel(container.files);
-%         container.file_pointers(end+1,1:4) = {false,name_part,ext_part,pathname};
-        container.file_pointers(end+1,1:3) = {false,name_part,ext_part};
+        vars.files{end+1} = TraceFile(full_name);
+        vars.files{end}.index = numel(vars.files);
+%         vars.fileinfo(end+1,1:4) = {false,name_part,ext_part,pathname};
+        vars.fileinfo(end+1,1:3) = {false, name_part, ext_part};
     end
 
-    set(table_of_fileinfo,'Data',container.file_pointers);
-%     table_files.Position(3:4) = table_files.Extent(3:4);
-%     container.traces{end+1} = 
 end
