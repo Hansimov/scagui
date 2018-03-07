@@ -18,13 +18,19 @@ methods
         obj.createTables;
         obj.createMenus;
         obj.setFigProperties;
+        
+        obj.fig.Visible = 'on';
     end
 end
 
 methods    
     function createFig(obj)
-        obj.fig= figure('Name','SCA Master', 'NumberTitle','off', 'Position',[200 200 1280 720]);
+        obj.fig = figure('Name','SCA Master');
+        obj.fig.Visible = 'off';
+        obj.fig.NumberTitle = 'off';
+        obj.fig.Position = [200 200 1280 720];
         obj.fig.MenuBar = 'None';
+        movegui(obj.fig,'center');
 %         obj.top.Renderer = 'painters';
     end
     
@@ -46,7 +52,7 @@ methods
     function createTables(obj)
         obj.box.files = uix.VBoxFlex('Parent',obj.tab.fileinfo);
         obj.table.fileinfo = Xuitable('Parent',obj.box.files);
-        obj.table.fileinfo.m.ColumnName = {'选中','文件','类型'};
+        obj.table.fileinfo.m.ColumnName = {'选中','文件','格式'};
         obj.table.fileinfo.m.ColumnEditable = [true false false];
         obj.table.fileinfo.m.ColumnWidth = {35 100 60};
 %         obj.table.fileinfo.m.CellEditCallback = @obj.table.files.updateTable;

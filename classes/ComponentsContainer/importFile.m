@@ -28,9 +28,7 @@ function importFile(src,event)
         fullpath = [dirname filename{i}];
 %         [dir_part,name_part,ext_part] = fileparts(fullpath);
         vars.files{end+1} = TraceFile(fullpath);
-        vars.files{end}.index = numel(vars.files);
-%         vars.fileinfo(end+1,1:4) = {false,name_part,ext_part,pathname};
-%         vars.fileinfo(end+1,1:3) = {false, name_part, ext_part};
+%         vars.files{end}.index = numel(vars.files);
     end
 
 end

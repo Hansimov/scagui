@@ -1,13 +1,13 @@
-function trs_info = getTrsInfo(trs_file)
-    [path_part,name_part,ext_part] = fileparts(trs_file);
+function trs_info = getTrsInfo(fullpath)
+    [path_part,name_part,ext_part] = fileparts(fullpath);
     if isequal(ext_part,'.trs')
-        fid = fopen(trs_file,'r'); 
+        fid = fopen(fullpath,'r'); 
         % I don't bother to check if fid < 0.
         info_cell = struct2cell(readHeader(fid));
         trs_info = reconstructCell(info_cell);
         fclose(fid);
     elseif isequal(ext_part,'.mat')
-        mf = matfile(trs_file);
+        mf = matfile(fullpath);
         if isprop(mf,'trs_info')  % .mat files saved by scagui
             info_cell = struct2cell(mf.trs_info);
             trs_info = reconstructCell(info_cell);
@@ -21,17 +21,4 @@ function trs_info = getTrsInfo(trs_file)
             delete(import_bar);
         end
     end 
-end
-
-function cell_out = reconstructCell(cell_in)
-    % We get a [14 x 1] cell, and each element is a [1 x 2] cell
-    % What we want is a [14 x 2] cell
-    row = size(cell_in,1);
-    col = size(cell_in{1},2);
-    cell_out = cell(row,col);
-    for i = 1:row
-        for j = 1:col
-            cell_out{i,j} = cell_in{i}{j};
-        end
-    end
 end

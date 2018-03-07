@@ -21,8 +21,6 @@ classdef Xuitab < handle
             jCloseButton = obj.createCloseIcon();
             obj.createJPanel();
             obj.addCloseIcon(jCloseButton);
-%             obj.createSpinner();
-%             obj.createPlots();
         end
     end
     
@@ -53,9 +51,9 @@ classdef Xuitab < handle
         function addCloseIcon(obj,jCloseButton)
             global comps vars;
             obj.panel.add(jCloseButton);
-            jTabGroup = findjobj(comps.tabgroup.plots,'class','JTabbedPane','persist');
-            jTabGroup = handle(jTabGroup,'CallbackProperties'); 
-            % Without the line above, an error will happen:
+            jTabGroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane', 'persist');
+%             jTabGroup = handle(jTabGroup,'CallbackProperties'); 
+            % With/without the line above, an error will happen:
             %   "Undefined function 'setTabComponentAt' for input arguments of type 'handle.handle'."
             jTabGroup.setTabComponentAt(numel(vars.tabs), obj.panel);
             % Why I do not use numel(vars.tabs)-1?

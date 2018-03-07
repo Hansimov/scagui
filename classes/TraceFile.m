@@ -1,18 +1,18 @@
 classdef TraceFile < handle
-properties
-    fullpath
-    dir
-    name
-    ext
-    info          % Cell type
-    trs_info      % Struct type
-    trs_data
-    trs_samples
-    entity
-    trace_num
+properties (SetObservable, AbortSet)
+    fullpath = '';
+    dir = '';
+    name = '';
+    ext = '';
+    info          % ? x 2 Cell
+    trs_info      % Struct
+    trs_data      % ? x 1 Cell
+    trs_samples   % Used in temporate TraceFile
+    entity        % Linked to matfile
+    trace_num     
     sample_num
-    index         % Row number in the table_files
-    status        % isDownsampled, isLowpassed, isAligned
+%     index         % Row number in the table_files
+    status        % isDownsampled, isLowpassed, isAligned, isAttacked
 end
 
 methods
@@ -20,19 +20,31 @@ methods
         if isempty(varargin)
         else
             fullpath = varargin{1};
-            obj.initialize(fullpath);
+            obj.entitize(fullpath);
         end
-        obj.createStatus();
+        obj.addListeners;
+        obj.createStatus;
     end
-
-    function initialize(obj,fullpath)
+    
+    function entitize(obj,fullpath)
         obj.fullpath = fullpath;
         [obj.dir, obj.name, obj.ext] = fileparts(fullpath);
         if isequal(obj.ext,'.mat')
             obj.entity = matfile(fullpath);
+            obj.trs_info = obj.entity.trs_info;
+            obj.trs_data = obj.entity.trs_data;
+            obj.trace_num = obj.trs_info.nt{2};
+            obj.sample_num = obj.trs_info.ns{2};
         end
         obj.info = getTrsInfo(fullpath);
-        obj.trs_info = obj.entity.trs_info;
+    end
+    
+    function addListeners(obj)
+        addlistener(obj,'trs_info','PostSet',@obj.updateTrsinfo);
+    end
+
+    function updateTrsinfo(obj,~,~)
+        obj.info = reconstructCell(struct2cell(obj.trs_info));
         obj.trace_num = obj.trs_info.nt{2};
         obj.sample_num = obj.trs_info.ns{2};
     end
@@ -41,90 +53,82 @@ end
 methods
     function createContextMenu(obj,ctmenu)
         if strcmp(obj.ext,'.trs')
-            uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@obj.convertToMat);
+            uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',{@convertToMat,obj});
+        elseif strcmp(obj.ext,'.mat')
+            menu.view = uimenu(ctmenu,'Label','查看曲线','Callback',@obj.viewFile);
+%             menu.view.Separator = 'on';
+            menu.downsample = uimenu(ctmenu,'Label','降采样','Callback',{@downSample,obj});
+            menu.downsample.Separator = 'on';
+            uimenu(ctmenu,'Label','低通','Callback',@obj.lowpass);
+            uimenu(ctmenu,'Label','对齐','Callback',@obj.align);
+            uimenu(ctmenu,'Label','攻击','Callback',@obj.attack);
+        elseif strcmp(obj.ext,'')
+            uimenu(ctmenu,'Label','保存为 .mat 格式','Callback',@obj.saveToMat);
         end
-        if strcmp(obj.ext,'.mat')
-            uimenu(ctmenu,'Label','查看曲线','Callback',@obj.viewFile);
-        end
-        uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
+        menu.delete = uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
+        menu.delete.ForegroundColor = 'red';
+        menu.delete.Separator = 'on';
+        menu.delete.Checked = 'on';
     end
     
     function createStatus(obj)
-        status_cell = {'isDownsampled','isLowpassed','isAligned'};
+        status_cell = {'isDownsampled','isLowpassed','isAligned','isAttacked'};
         for i = 1:numel(status_cell)
-            if ~isfield(obj.status,status_cell{i})
+            if ~isfield(obj.status, status_cell{i})
                 eval(['obj.status.' status_cell{i} '= false;'])
             end
         end
     end
 end
 
-methods 
-    function obj_new = copy(obj)
-        
-    end
-end
-
 methods
-    function sample_out = downsample(obj,down_rate)
-        sample_out = {};
-        for i = 1:obj.trace_num
-            sample_vec = cell2mat(obj.entity.trs_sample(1,1));
-            sample_out{i} = downSample(sample_vec,down_rate);
+    function obj_copy = copy(obj)
+        obj_copy = TraceFile();
+        obj_copy_props = properties('TraceFile');
+        
+        props_not_copied = {'fullpath','ext','entity'};
+        for i = 1:numel(obj_copy_props)
+            if ~ismember(obj_copy_props{i},props_not_copied)
+                eval(['obj_copy.' obj_copy_props{i} '= obj.' obj_copy_props{i} ';']);
+            end
         end
     end
-
-    function sample_out = lowpass(obj,cutoff_freq)
-    end
-
-    function sample_out = align(obj,base_trace)
+    
+    function saveToMat(obj)
+        disp('saved!');
     end
 end
 
 methods
-function convertToMat(obj,~,~)
-    trs_fullname = obj.fullpath;
-    [mat_filename,mat_dirname] = uiputfile('*.mat', '保存为...',[path_part filesep name_part]);
-    if mat_filename ~= 0
-        mat_fullname = [mat_dirname, mat_filename];
-    else
-        return;
-    end
-     [~,canceled] = trs2mat(trs_fullname, mat_fullname);
-     if ~canceled
-         file_open_choice = questdlg('文件保存成功，是否在软件中打开？', '', ...
-                                    '是','否','是');
-         switch file_open_choice
-             case '是'
-                 global vars;
-                 [mat_dir_part, mat_name_part, mat_ext_part] = fileparts(mat_fullname);
-%                  vars.fileinfo(end+1,1:3) = {false, mat_name_part, mat_ext_part};
-                 vars.files{end+1,1} = TraceFile(mat_fullname);
-             case '否'
-             otherwise
-         end
-     end
-end
 
-function viewFile(obj,~,~)
-    global vars comps;
-    vars.tabs{end+1} = Xuitab(comps.tabgroup.plots,'Title',num2str(numel(vars.tabs)));
-    vars.tabs{end}.file = obj; % This line should be put before the below.
-    vars.tabs{end}.type = 'original';
-end
-
-function deleteFile(~,~)
-    global vars;
-    vars.files(row,:) = [];
-    vars.file_pointers(row,:) = [];
-    set(table_of_traceinfo,'Data',{});
-    set(table_src, 'Data', vars.file_pointers);
-end
     
+    function sample_out = lowpass(obj,~,~,cutoff_freq)
+    end
+    
+    function sample_out = align(obj,~,~,base_trace)
+    end
 end
+
+methods
+
+    function viewFile(obj,~,~)
+        global vars comps;
+        vars.tabs{end+1} = Xuitab(comps.tabgroup.plots,'Title',num2str(numel(vars.tabs)));
+        vars.tabs{end}.file = obj; % This line should be put before the below.
+        vars.tabs{end}.type = 'original';
+    end
+
+% function deleteFile(~,~)
+%     global vars;
+%     vars.files(row,:) = [];
+%     vars.file_pointers(row,:) = [];
+%     set(table_of_traceinfo,'Data',{});
+%     set(table_src, 'Data', vars.file_pointers);
+% end
 
 end
 
+end
 
 
 

@@ -1,5 +1,4 @@
 function tableOperation(table_src, table_event)
-
     global comps vars;
     % When a cell is selected, it will cause an error when do other things.
     if isempty(table_event.Indices)
@@ -19,14 +18,13 @@ function tableOperation(table_src, table_event)
 %     path_part = cell_data{row,4};
 %     full_name = [path_part name_part ext_part];
 
-    set(comps.table.traceinfo.m,'Data', current_fileinfo);
+    set(comps.table.traceinfo.m, 'Data', current_fileinfo);
     comps.table.traceinfo.m.ColumnFormat = {'char' 'char'};
     
     createContext(ctmenu);
 
     function createContext(ctmenu)
         vars.files{row}.createContextMenu(ctmenu);
-
     end
 
 end
