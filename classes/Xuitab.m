@@ -42,8 +42,8 @@ classdef Xuitab < handle
         end
         
         function createJPanel(obj)
-            global container;
-            obj.index = numel(container.tabs)+1;
+            global vars;
+            obj.index = numel(vars.tabs)+1;
             obj.panel = javax.swing.JPanel; % default layout = FlowLayout
             set(obj.panel.getLayout, 'Hgap',5, 'Vgap',0);  % default gap = 5px
             jLabel = javax.swing.JLabel(obj.m.Title);
@@ -51,12 +51,14 @@ classdef Xuitab < handle
         end
         
         function addCloseIcon(obj,jCloseButton)
-            global container;
+            global comps vars;
             obj.panel.add(jCloseButton);
-            jTabGroup = findjobj(container.tabgroup,'class','JTabbedPane','persist');
-%             jTabGroup = handle(jTabGroup,'CallbackProperties');
-            jTabGroup.setTabComponentAt(numel(container.tabs),obj.panel);
-            % Why I do not use numel(container.tabs)-1? 
+            jTabGroup = findjobj(comps.tabgroup.plots,'class','JTabbedPane','persist');
+            jTabGroup = handle(jTabGroup,'CallbackProperties'); 
+            % Without the line above, an error will happen:
+            %   "Undefined function 'setTabComponentAt' for input arguments of type 'handle.handle'."
+            jTabGroup.setTabComponentAt(numel(vars.tabs), obj.panel);
+            % Why I do not use numel(vars.tabs)-1?
             % Because current Xuitab object has not been added to the container.tabs.
         end
         
@@ -69,24 +71,22 @@ classdef Xuitab < handle
 end
 
 
-function closeTab(src,event,obj)
+function closeTab(src, event, obj)
     current_tab_index = obj.index;
-    
-    global container;
-    
+    global vars;    
     updateTabIndex(current_tab_index); 
     % The line above should be over the two lines below.
     % If the cell element which represents the current tab is assign empty first,
     %   update tab index should begin from current_tab_index, instead of current_tab_index+1
-    container.tabs(current_tab_index) = [];
+    vars.tabs(current_tab_index) = [];
     delete(obj.m);
     delete(obj);
 end
 
 function updateTabIndex(current_tab_index)
-    global container;
-    for i = current_tab_index+1 : numel(container.tabs)
-        container.tabs{i}.index = container.tabs{i}.index - 1;
+    global vars;
+    for i = current_tab_index+1 : numel(vars.tabs)
+        vars.tabs{i}.index = vars.tabs{i}.index - 1;
     end
 end
 

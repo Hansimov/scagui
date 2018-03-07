@@ -5,7 +5,7 @@ properties (SetObservable, AbortSet)
     files = {};
     tabs = {};
 %     traces = {}; % Contain traces processed
-    tabgroup
+%     tabgroup
 %     current_file;
 %     current_tab;
 %     current_trace;        
@@ -28,6 +28,10 @@ methods
         set(comps.table.fileinfo.m, 'Data', obj.fileinfo);
     end
     function updateFiles(obj,src,event)
+        global vars;
+        for i = 1:numel(vars.files)
+            vars.fileinfo(i,1:3) = {false, vars.files{i}.name, vars.files{i}.ext};
+        end
     end
 end
 
