@@ -7,7 +7,7 @@ properties (SetObservable, AbortSet)
     info          % ? x 2 Cell
     trs_info      % Struct
     trs_data      % ? x 1 Cell
-    trs_sample    % Used in temporate TraceFile
+    trs_sample    % ? x 1 Cell
     entity        % Linked to matfile
     trace_num     
     sample_num
@@ -54,13 +54,14 @@ end
 methods
     function createContextMenu(obj,ctmenu)
         if strcmp(obj.ext,'.trs')
-            uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',{@convertToMat,obj});
+            uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',@obj.convertToMat);
         else
-            menu.view = uimenu(ctmenu,'Label','查看曲线','Callback',{@viewFile,obj});
+            menu.viewFile = uimenu(ctmenu,'Label','查看曲线','Callback',@obj.viewFile);
+            menu.viewFreq = uimenu(ctmenu,'Label','查看频谱','Callback',@obj.viewFreq);
 %             menu.view.Separator = 'on';
-            menu.downsample = uimenu(ctmenu,'Label','降采样','Callback',{@downSample,obj});
+            menu.downsample = uimenu(ctmenu,'Label','降采样','Callback',@obj.downsample);
             menu.downsample.Separator = 'on';
-            uimenu(ctmenu,'Label','低通','Callback',{@lowPass,obj});
+            uimenu(ctmenu,'Label','低通','Callback',@obj.lowpass);
             uimenu(ctmenu,'Label','对齐','Callback',@obj.align);
             menu.attack = uimenu(ctmenu,'Label','攻击','Callback',@obj.attack);
 %             uimenu(menu.attack,'Label','AES');
@@ -112,7 +113,12 @@ end
 % end
 
 methods
-
+    convertToMat(obj,~,~)
+    viewFile(obj,~,~)
+    
+    downsample(obj,~,~)
+    lowpass(obj,~,~)
+    viewFreq(obj,~,~)
 
 
 % function deleteFile(~,~)

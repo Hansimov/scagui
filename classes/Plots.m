@@ -29,7 +29,7 @@ classdef Plots < handle
         function plotOriginalTrace(obj)
             xuitab = obj.tab;
             obj.ax = axes(xuitab.m);
-            [obj.jspinner, obj.mspinner] = createSpinner(obj.ax,xuitab);
+            [obj.jspinner, obj.mspinner] = createSpinner(obj.ax, xuitab);
         end
         
         function plotDownsampledTrace(obj)

@@ -1,4 +1,4 @@
-function convertToMat(~,~,obj)
+function convertToMat(obj,~,~)
     trs_fullname = obj.fullpath;
     [mat_filename,mat_dirname] = uiputfile('*.mat', '±£´æÎª...',[obj.dir filesep obj.name]);
     if mat_filename ~= 0

@@ -24,7 +24,7 @@ classdef Xuitab < handle
         end
     end
     
-    methods (Access = private)
+    methods % (Access = private)
         function addListeners(obj)
             addlistener(obj,'type','PostSet',@obj.createPlots);
         end
@@ -51,8 +51,8 @@ classdef Xuitab < handle
         function addCloseIcon(obj,jCloseButton)
             global comps vars;
             obj.panel.add(jCloseButton);
-            jTabgroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane','persist');
             try
+                jTabgroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane','persist');
                 jTabgroup = jTabgroup(end); % In case several handles are returned
             catch
                 jTabgroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane','persist');
@@ -66,7 +66,7 @@ classdef Xuitab < handle
             jTabgroup.setTabComponentAt(numel(vars.tabs), obj.panel);
         end
         
-        function createPlots(obj,src,data)
+        function createPlots(obj,~,~)
             obj.plots = Plots(obj);
         end
         

@@ -33,7 +33,8 @@ Y = fft(X);
 %   and the even-valued signal length L.
 P2 = abs(Y/L);
 P1 = P2(1:L/2+1);
-P1(2:end-1) = 2*P1(2:end-1);
+% P1(2:end-1) = 2*P1(2:end-1);
+P1(1:end) = 2*P1(1:end);
 
 % Define the frequency domain f,
 %   and plot the single-sided amplitude spectrum P1. 
@@ -43,6 +44,7 @@ P1(2:end-1) = 2*P1(2:end-1);
 
 f = Fs*(0:(L/2))/L; % This line determines the x-axis unit. Important!
 plot(f,P1);
+% plot(P2);
 title('Single-Sided Amplitude Spectrum of X(t)');
 xlabel('f (Hz)');
 ylabel('|P1(f)|');
