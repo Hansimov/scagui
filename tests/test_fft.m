@@ -58,3 +58,5 @@ plot(f,P1)
 title('Single-Sided Amplitude Spectrum of S(t)')
 xlabel('f (Hz)')
 ylabel('|P1(f)|')
+
+%%

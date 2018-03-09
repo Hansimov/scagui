@@ -51,13 +51,19 @@ classdef Xuitab < handle
         function addCloseIcon(obj,jCloseButton)
             global comps vars;
             obj.panel.add(jCloseButton);
-            jTabGroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane', 'persist');
-%             jTabGroup = handle(jTabGroup,'CallbackProperties'); 
-            % With/without the line above, an error will happen:
+            jTabgroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane','persist');
+            try
+                jTabgroup = jTabgroup(end); % In case several handles are returned
+            catch
+                jTabgroup = findjobj(comps.tabgroup.plots, 'class', 'JTabbedPane','persist');
+            end
+%             https://undocumentedmatlab.com/blog/uitab-colors-icons-images#comment-342129
+            % Without the line above, an error will sometimes happen:
             %   "Undefined function 'setTabComponentAt' for input arguments of type 'handle.handle'."
-            jTabGroup.setTabComponentAt(numel(vars.tabs), obj.panel);
+%                 obj.tabgroup.plots.pane = handle(jTabGroup,'CallbackProperties');
             % Why I do not use numel(vars.tabs)-1?
             % Because current Xuitab object has not been added to the container.tabs.
+            jTabgroup.setTabComponentAt(numel(vars.tabs), obj.panel);
         end
         
         function createPlots(obj,src,data)

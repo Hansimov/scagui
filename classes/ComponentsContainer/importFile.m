@@ -1,4 +1,4 @@
-function importFile(src,event)
+function importFile(~,~)
     global vars;
     [filename, dirname, ~] = uigetfile( { '*.mat;*.trs','所有数据类型';...
                                            '*.mat','MAT 格式 (*.mat)'; ...
@@ -24,11 +24,13 @@ function importFile(src,event)
     % `dir_part` does not have a backslash (\)
     % So I use `pathname` here to avoid unforeseen problems.
     % Of course you can use fullfile() or filesep().
+    wait_bar = waitbar(0.98,'正在导入曲线，请稍等 ...');
     for i = 1:numel(filename)
         fullpath = [dirname filename{i}];
 %         [dir_part,name_part,ext_part] = fileparts(fullpath);
         vars.files{end+1} = TraceFile(fullpath);
 %         vars.files{end}.index = numel(vars.files);
     end
+    delete(wait_bar);
 
 end

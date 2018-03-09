@@ -6,7 +6,7 @@ properties
     tabgroup
     tab
     table
-    menu    
+    menu
 end
     
 methods
@@ -18,7 +18,6 @@ methods
         obj.createTables;
         obj.createMenus;
         obj.setFigProperties;
-        
         obj.fig.Visible = 'on';
     end
 end

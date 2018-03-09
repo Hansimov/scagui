@@ -69,10 +69,9 @@ function updateSpinnerPosition(current_tab, event, mspinner)
 end
 
 function updatePlots(src, data, ax, xuitab)
-%     global vars;
     current_trace_index = src.getValue;
-%     current_file_index = xuitab.file.index;
-    plot(ax,cell2mat(xuitab.file.entity.trs_sample(current_trace_index,1)));
+    plot(ax,cell2mat(xuitab.file.trs_sample(current_trace_index,1)));
+    ax.XLim = [0 inf];
 end
 
 

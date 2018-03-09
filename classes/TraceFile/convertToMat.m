@@ -13,7 +13,7 @@ function convertToMat(~,~,obj)
         switch file_open_choice
             case 'ÊÇ'
                 global vars;
-                vars.files{end+1, 1} = TraceFile(mat_fullname);
+                vars.files{end+1} = TraceFile(mat_fullname);
             case '·ñ'
             otherwise
         end

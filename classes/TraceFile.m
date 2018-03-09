@@ -7,7 +7,7 @@ properties (SetObservable, AbortSet)
     info          % ? x 2 Cell
     trs_info      % Struct
     trs_data      % ? x 1 Cell
-    trs_samples   % Used in temporate TraceFile
+    trs_sample    % Used in temporate TraceFile
     entity        % Linked to matfile
     trace_num     
     sample_num
@@ -33,6 +33,7 @@ methods
             obj.entity = matfile(fullpath);
             obj.trs_info = obj.entity.trs_info;
             obj.trs_data = obj.entity.trs_data;
+            obj.trs_sample = obj.entity.trs_sample;
             obj.trace_num = obj.trs_info.nt{2};
             obj.sample_num = obj.trs_info.ns{2};
         end
@@ -54,16 +55,19 @@ methods
     function createContextMenu(obj,ctmenu)
         if strcmp(obj.ext,'.trs')
             uimenu(ctmenu,'Label','转换成 .mat 格式','Callback',{@convertToMat,obj});
-        elseif strcmp(obj.ext,'.mat')
-            menu.view = uimenu(ctmenu,'Label','查看曲线','Callback',@obj.viewFile);
+        else
+            menu.view = uimenu(ctmenu,'Label','查看曲线','Callback',{@viewFile,obj});
 %             menu.view.Separator = 'on';
             menu.downsample = uimenu(ctmenu,'Label','降采样','Callback',{@downSample,obj});
             menu.downsample.Separator = 'on';
-            uimenu(ctmenu,'Label','低通','Callback',@obj.lowpass);
+            uimenu(ctmenu,'Label','低通','Callback',{@lowPass,obj});
             uimenu(ctmenu,'Label','对齐','Callback',@obj.align);
-            uimenu(ctmenu,'Label','攻击','Callback',@obj.attack);
-        elseif strcmp(obj.ext,'')
-            uimenu(ctmenu,'Label','保存为 .mat 格式','Callback',@obj.saveToMat);
+            menu.attack = uimenu(ctmenu,'Label','攻击','Callback',@obj.attack);
+%             uimenu(menu.attack,'Label','AES');
+            if strcmp(obj.ext,'')
+                menu.savetomat = uimenu(ctmenu,'Label','保存为 .mat 格式','Callback',@obj.saveToMat);
+                menu.savetomat.Separator = 'on';
+            end
         end
         menu.delete = uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
         menu.delete.ForegroundColor = 'red';
@@ -99,24 +103,17 @@ methods
     end
 end
 
-methods
-
-    
-    function sample_out = lowpass(obj,~,~,cutoff_freq)
-    end
-    
-    function sample_out = align(obj,~,~,base_trace)
-    end
-end
+% methods
+%     function sample_out = lowpass(obj,~,~,cutoff_freq)
+%     end
+%     
+%     function sample_out = align(obj,~,~,base_trace)
+%     end
+% end
 
 methods
 
-    function viewFile(obj,~,~)
-        global vars comps;
-        vars.tabs{end+1} = Xuitab(comps.tabgroup.plots,'Title',num2str(numel(vars.tabs)));
-        vars.tabs{end}.file = obj; % This line should be put before the below.
-        vars.tabs{end}.type = 'original';
-    end
+
 
 % function deleteFile(~,~)
 %     global vars;

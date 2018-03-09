@@ -12,7 +12,7 @@ function output_sample = traceDownsample(input_sample, down_rate)
 % It is easy to extend this to more dimensions.
 
 input_sample_num = size(input_sample,2);
-output_sample_num = floor(input_sample_num / down_rate);
+% output_sample_num = floor(input_sample_num / down_rate);
 
 sample_type = class(input_sample(1));
 
