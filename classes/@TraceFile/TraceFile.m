@@ -59,9 +59,9 @@ methods
             menu.viewFile = uimenu(ctmenu,'Label','查看曲线','Callback',@obj.viewFile);
             menu.viewFreq = uimenu(ctmenu,'Label','查看频谱','Callback',@obj.viewFreq);
 %             menu.view.Separator = 'on';
-            menu.downsample = uimenu(ctmenu,'Label','降采样','Callback',@obj.downsample);
+            menu.downsample = uimenu(ctmenu,'Label','降采样','Callback',@obj.downSample);
             menu.downsample.Separator = 'on';
-            uimenu(ctmenu,'Label','低通','Callback',@obj.lowpass);
+            uimenu(ctmenu,'Label','低通','Callback',@obj.lowPass);
             uimenu(ctmenu,'Label','对齐','Callback',@obj.align);
             menu.attack = uimenu(ctmenu,'Label','攻击','Callback',@obj.attack);
 %             uimenu(menu.attack,'Label','AES');
@@ -104,22 +104,14 @@ methods
     end
 end
 
-% methods
-%     function sample_out = lowpass(obj,~,~,cutoff_freq)
-%     end
-%     
-%     function sample_out = align(obj,~,~,base_trace)
-%     end
-% end
 
 methods
     convertToMat(obj,~,~)
     viewFile(obj,~,~)
     
-    downsample(obj,~,~)
-    lowpass(obj,~,~)
+    downSample(obj,~,~)
+    lowPass(obj,~,~)
     viewFreq(obj,~,~)
-
 
 % function deleteFile(~,~)
 %     global vars;

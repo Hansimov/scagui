@@ -46,10 +46,13 @@ end
 
 function [jspinner,mspinner] = createSpinner(ax,xuitab)
     trace_num = xuitab.file.trace_num;
-    sm = javax.swing.SpinnerNumberModel(2,1,trace_num,1); % default, min, max, step
+    sm = javax.swing.SpinnerNumberModel(2,1,trace_num,1); 
+    % default, min, max, step
     % Why I set the default as 2?
     % Because I want to update the plot directly when it is created.
     % To implement this, I set the default value 2 back to 1.
+    % This method may cause error if there is only on trace.
+    % Later I will improve this by checking input arguments of updatePlots.
     js = javax.swing.JSpinner(sm);
     [jspinner, mspinner] = javacomponent(js);
     current_tab = xuitab.m;
@@ -59,7 +62,7 @@ function [jspinner,mspinner] = createSpinner(ax,xuitab)
 
     set(current_tab,'SizeChangedFcn', {@updateSpinnerPosition, mspinner});
     set(jspinner,'StateChangedCallback',{@updatePlots,ax,xuitab});
-    jspinner.setValue(1); 
+    jspinner.setValue(1);
 end
 
 

@@ -13,10 +13,21 @@ Developed by: Hansimov
 ## Todo
 
 * Appearance
+	* Look and Feel
 
 * Functions
+	* Online update
+	* Supports 2nd-order development
+	* Multi-language
+	* Remember users' configurations:
+		* Layouts
+		* Languages
 
 * Documents
+	* Installation
+	* Usage
+	* Preliminary knowledge
+	* HTML/PDF/LiveScript format
 
 * Miscellaneous
 

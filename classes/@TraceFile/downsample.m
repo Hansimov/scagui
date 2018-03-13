@@ -1,9 +1,10 @@
-function downsample(obj,~,~)
+function downSample(obj,~,~)
     down_rate = createDownsampleWindow(obj.sample_num);
     if down_rate == -1
         return ;
     end
     obj_new = obj.copy;
+    obj_new.name = [obj.name '_ds'];
     obj_new.status.isDownsampled = true;
     sample_downed = cell(obj.trace_num,1);
     progress_bar = waitbar(0,'正在对曲线进行降采样 ...','Name','降采样', ...
@@ -36,7 +37,7 @@ function down_rate = createDownsampleWindow(sample_num)
     fig.Visible = 'off';
     fig.Resize = 'off';
     fig.Position = [1 1 400 200];
-    fig.Name = '降采样';
+    fig.Name = '降采样参数设置';
     fig.CloseRequestFcn = @closeFigure;
     
     txt_ask = uicontrol('Style','text');
