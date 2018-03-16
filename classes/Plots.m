@@ -11,7 +11,7 @@ classdef Plots < handle
     methods
         function obj = Plots(xuitab)
             obj.tab = xuitab;
-            xuitab.type
+%             xuitab.type
             switch lower(xuitab.type)
                 case 'original'
                     obj.plotOriginalTrace();

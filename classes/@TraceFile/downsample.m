@@ -1,4 +1,6 @@
-function downSample(obj,~,~)
+function obj_new =  downSample(obj,~,~)
+% I will parse the varargin later
+%   to choose mode 'gui' or 'cli'.
     down_rate = createDownsampleWindow(obj.sample_num);
     if down_rate == -1
         return ;
@@ -60,12 +62,12 @@ function down_rate = createDownsampleWindow(sample_num)
     
     btn_ok = uicontrol('Style','pushbutton','String','确定');
     btn_ok.Position = [btn_margin_left btn_margin_bottom btn_width btn_height];
-    btn_ok.Callback = @okButton;
+    btn_ok.Callback = @buttonOk;
     btn_ok.FontSize = 10;
     
     btn_cancel = uicontrol('Style','togglebutton','String','取消');
     btn_cancel.Position = [fig_width-btn_margin_left-btn_width btn_margin_bottom btn_width btn_height];
-    btn_cancel.Callback = @cancelButton;
+    btn_cancel.Callback = @buttonCancel;
     btn_cancel.FontSize = 10;
 
     movegui(fig,'center');
@@ -73,12 +75,12 @@ function down_rate = createDownsampleWindow(sample_num)
     
     uiwait(fig);
     
-    function okButton(~,~)
+    function buttonOk(~,~)
         down_rate = jspinner.getValue;
         closeFigure();
     end
 
-    function cancelButton(~,~)
+    function buttonCancel(~,~)
         down_rate = -1;
         closeFigure();
     end

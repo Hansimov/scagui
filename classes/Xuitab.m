@@ -63,7 +63,12 @@ classdef Xuitab < handle
 %                 obj.tabgroup.plots.pane = handle(jTabGroup,'CallbackProperties');
             % Why I do not use numel(vars.tabs)-1?
             % Because current Xuitab object has not been added to the container.tabs.
-            jTabgroup.setTabComponentAt(numel(vars.tabs), obj.panel);
+
+            try
+                jTabgroup.setTabComponentAt(numel(vars.tabs), obj.panel);
+            catch
+                jTabgroup(end).setTabComponentAt(numel(vars.tabs), obj.panel);
+            end
         end
         
         function createPlots(obj,~,~)

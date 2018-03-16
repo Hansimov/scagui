@@ -27,7 +27,7 @@ methods
         obj.fig = figure('Name','SCA Master');
         obj.fig.Visible = 'off';
         obj.fig.NumberTitle = 'off';
-        obj.fig.Position = [200 200 1280 720];
+        obj.fig.Position = [1 1 1280 720];
         obj.fig.MenuBar = 'None';
         movegui(obj.fig,'center');
 %         obj.top.Renderer = 'painters';
@@ -41,16 +41,17 @@ methods
     
     function createTabgroups(obj)
         obj.tabgroup.variables = uitabgroup('Parent',obj.box.infos);
-        obj.tabgroup.plots = uitabgroup(obj.box.plots);
+        obj.tabgroup.plots = uitabgroup('Parent',obj.box.plots);
     end
     
     function createTabs(obj)
-        obj.tab.fileinfo = uitab(obj.tabgroup.variables,'Title','文件');
+        obj.tab.fileinfo = uitab(obj.tabgroup.variables,'Title','变量浏览区');
     end
     
     function createTables(obj)
         obj.box.files = uix.VBoxFlex('Parent',obj.tab.fileinfo);
         obj.table.fileinfo = Xuitable('Parent',obj.box.files);
+        
         obj.table.fileinfo.m.ColumnName = {'选中','文件','格式'};
         obj.table.fileinfo.m.ColumnEditable = [true false false];
         obj.table.fileinfo.m.ColumnWidth = {35 100 60};
@@ -63,19 +64,17 @@ methods
     end
 
     function createMenus(obj)
-        % menu_file = uimenu(fig_top,'Label','文件');
-        % menu_data = uimenu(fig_top,'Label', '数据');
-        % menu_analysis = uimenu(fig_top, 'Label', '分析');
-        % menu_file_new = uimenu(menu_file, 'Label', '新建');
-        obj.menu.file.import = uimenu(obj.fig, 'Label', '导入','Callback', @importFile);
+        obj.menu.file = uimenu(obj.fig,'Label','文件');
+        obj.menu.data = uimenu(obj.fig,'Label', '数据');
+        obj.menu.analysis = uimenu(obj.fig, 'Label', '分析');
+        obj.menu.file_new = uimenu(obj.menu.file, 'Label', '新建');
+        obj.menu.file_import = uimenu(obj.menu.file, 'Label', '导入','Callback', @importFile);
         
-        % menu_data_downsample = uimenu(menu_data, 'Label', '重采样');
-        % menu_data_downsample.Callback = @dataDownSample;
-        % menu_data_filter = uimenu(menu_data, 'Label', '滤波');
-        % % menu_data_filter_lowpass = uimenu(menu_data_filter, 'Label', '低通');
-        % menu_data_align = uimenu(menu_data, 'Label','对齐');
+        obj.menu.data_downsample = uimenu(obj.menu.data, 'Label', '降采样');
+        obj.menu.data_lowpass = uimenu(obj.menu.data, 'Label', '低通滤波');
+        obj.menu.data_align = uimenu(obj.menu.data, 'Label','对齐');
         
-        % menu_analysis_aes = uimenu(menu_analysis, 'Label','AES');
+        obj.menu.analysis_aes = uimenu(obj.menu.analysis, 'Label','AES');
     end
         
     function setFigProperties(obj)

@@ -8,6 +8,7 @@ myline.XData = 2 * [1 1];
 
 fig.WindowButtonMotionFcn = @detectPointer;
 clicked = false;
+
 % ^^^
 % Why I put `clicked` outside the detectPointer?
 % Because if I do not, 
@@ -30,6 +31,10 @@ warning('off','MATLAB:modes:mode:InvalidPropertySet');
 jsp = JSpinner(SpinnerNumberModel(1,0,3,0.01));
 javacomponent(jsp);
 set(jsp,'StateChangedCallback',{@updateLine,myline});
+jsp.setValue(2);
+
+% set(gcf,'Renderer','painters');
+% set(gcf,'GraphicsSmoothing','off');
 
     function detectPointer(src,data)
         px = ax.CurrentPoint(1,1);
@@ -64,6 +69,7 @@ set(jsp,'StateChangedCallback',{@updateLine,myline});
             if px >= ax.XLim(2)
                 px = ax.XLim(2);
             end
+%             px = round(px,2);
             myline.XData = px * [1 1];
             myline.YData = ax.YLim;
             jsp.setValue(px);

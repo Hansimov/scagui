@@ -22,6 +22,18 @@ Developed by: Hansimov
 	* Remember users' configurations:
 		* Layouts
 		* Languages
+	* LowPass
+		* Preview
+	* Downsample
+		* Specify number or range of traces
+		* 
+	* Cryptography toolkits
+		* Cryptography algorithms
+		* Knowledge
+		* Visualize flow of crypto algorithms
+		* Arbitary inter values
+	* Interact with HTML
+		* HTTP
 
 * Documents
 	* Installation
