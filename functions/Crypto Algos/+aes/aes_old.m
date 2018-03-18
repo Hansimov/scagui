@@ -286,7 +286,7 @@ else
     byte_shifted = BinToHex(ShiftLeft(HexToBin(byte_in),1,0));
     
     if hex2dec(byte_in(1)) >= 8     % MSB == 1
-        byte_xor = ByteXor(byte_shifted,'1B');
+        byte_xor = ByteXor(byte_shifted,'1B'); % 00011011
     else                            % MSB == 0
         byte_xor = ByteXor(byte_shifted,'00');
     end

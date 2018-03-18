@@ -47,59 +47,81 @@ methods
             statein = varargin{1};
         end
         
-        obj.normalize(statein);
-        obj.toOtherTypes;
+        changedProp = obj.initialize(statein);
+        obj.typeConversion(changedProp);
         obj.addListeners;
     end
     
-    function normalize(obj,varargin)
-        if numel(varargin) == 2 % 'hexrow' changed
-            obj.char2norm(obj.hexrow);
-        elseif numel(varargin) == 1
-            statein = varargin{1};
-            if isa(statein,'char')
-                if isequal(size(statein),[1 32])
-                    obj.char2norm(statein);
-                else
-                    disp('Invalied size of characters!')
-                end
-            elseif isa(statein,'cell')
-                if isequal(size(statein),[4 4])
-                    obj.cell2norm(statein);
-                else
-                    disp('Invalid size of cells!');
-                end
-            elseif isa(statein,'aes.State')
-                obj.norm = statein.norm;
+    function changedProp = initialize(obj,statein)
+        if isa(statein,'char')
+            if isequal(size(statein),[1 32])
+                obj.hexrow = statein;
+                changedProp = 'hexrow';
             else
-                disp('Invalid type of inputs!')
+                disp('Invalied size of characters!')
             end
+        elseif isa(statein,'cell')
+            if isequal(size(statein),[4 4])
+                obj.hexmat = statein;
+                changedProp = 'hexmat';
+            else
+                disp('Invalid size of cells!');
+            end
+        elseif isa(statein,'aes.State')
+            obj.norm = statein.norm;
+             changedProp = 'norm';
+        else
+            disp('Invalid type of inputs!')
         end
     end
-    function toOtherTypes(obj,varargin)
-        obj.norm2hexrow;
-        obj.norm2hexmat;
+    
+    function typeConversion(obj,varargin)
+        if numel(varargin) == 1     % changedProp
+            changedProp = varargin{1};
+        elseif numel(varargin) == 2 % src, data
+            changedProp = varargin{1}.Name;
+        else
+            disp('Invalid size of inputs!');
+            return ;
+        end
+        
+        if strcmp(changedProp, 'norm')
+            obj.norm2hexrow;
+            obj.norm2hexmat;
+        elseif strcmp(changedProp, 'hexrow')
+            obj.hexrow2norm;
+            obj.norm2hexmat;
+        elseif strcmp(changedProp, 'hexmat')
+            obj.hexmat2norm;
+            obj.norm2hexrow;
+        end
     end
     
+    
     function addListeners(obj)
-        addlistener(obj,'norm','PostSet',@obj.toOtherTypes);
-        addlistener(obj,'hexrow','PostSet',@obj.normalize);
+        addlistener(obj,'norm','PostSet',@obj.typeConversion);
+        addlistener(obj,'hexrow','PostSet',@obj.typeConversion);
+        addlistener(obj,'hexmat','PostSet',@obj.typeConversion);
     end
 
 end
 
 methods
-    function char2norm(obj,statein)
+    function hexrow2norm(obj)
+        normcell = cell(4,4);
         for i = 1:16
-           byte = statein(1,2*i-1:2*i);
-           obj.norm{i} = aes.Byte(byte);
+           byte = obj.hexrow(1,2*i-1:2*i);
+           normcell{i} = aes.Byte(byte);
         end
+        obj.norm = normcell;
     end
-    function cell2norm(obj,statein)
+    function hexmat2norm(obj)
+        normcell = cell(4,4);
         for i = 1:16
-            byte = statein{i};
-            obj.norm{i} = aes.Byte(byte);
+            byte = obj.hexmat{i};
+            normcell{i} = aes.Byte(byte);
         end
+        obj.norm = normcell;
     end
     
     function norm2hexrow(obj)
@@ -113,10 +135,11 @@ methods
         % So I need to assing the whole string together to the obj.hexrow
     end
     function norm2hexmat(obj)
-       obj.hexmat = cell(4,4);
+       hexmat_tmp = cell(4,4);
        for i = 1:16
-           obj.hexmat{i} = obj.norm{i}.hex;
+           hexmat_tmp{i} = obj.norm{i}.hex;
        end
+       obj.hexmat = hexmat_tmp;
     end
     
 end

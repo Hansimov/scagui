@@ -1,12 +1,17 @@
 classdef Constant < handle
 % Constants used in AES algorithms
 properties
-    sbox
+    sbox    % [16x16]    char cell - used in subBytes
+    mbox    % [ 4x 4]  double cell - used in mixColumns
+    rc      % [ 4x 7]    char cell - used in keyExpansion
+    
 end
 
 methods
     function obj = Constant()
-       obj.setSbox; 
+        obj.setSbox;
+        obj.setMbox;
+        obj.setRc;
     end
 end
 
@@ -30,6 +35,23 @@ methods
             '70','3E','B5','66','48','03','F6','0E','61','35','57','B9','86','C1','1D','9E';
             'E1','F8','98','11','69','D9','8E','94','9B','1E','87','E9','CE','55','28','DF';
             '8C','A1','89','0D','BF','E6','42','68','41','99','2D','0F','B0','54','BB','16'
+            };
+    end
+    function setMbox(obj)
+        obj.mbox =  {
+            2,3,1,1;
+            1,2,3,1;
+            1,1,2,3;
+            3,1,1,2
+            };
+    end
+    
+    function setRc(obj)
+        obj.rc = { % Round Constants
+            '01','02','04','08','10','20','40';
+            '00','00','00','00','00','00','00';
+            '00','00','00','00','00','00','00';
+            '00','00','00','00','00','00','00'
             };
     end
 end
