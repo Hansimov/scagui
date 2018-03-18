@@ -2,9 +2,12 @@ function binstr2hex(obj)
 % binstr  % [1x8]   char array : '10001111'
 % vvv
 % hex     % [1x2]   char array : '8f'
-    if ~isempty(obj.hex)
-        return ;
-    end
+
+%     if ~isempty(obj.hex)
+%         return ;
+%     end
+%  I comment this because this does not allow change of hex
+%    when other properties is set.
     
     binstr = obj.binstr;
     num = numel(binstr)/4;

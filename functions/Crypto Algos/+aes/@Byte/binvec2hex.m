@@ -2,9 +2,12 @@ function binvec2hex(obj)
 % binvec  % [1x8] double array : [1 0 0 0 1 1 1 1]
 % vvv
 % hex     % [1x2]   char array : '8f'
-    if ~isempty(obj.hex)
-        return ;
-    end
+
+%     if ~isempty(obj.hex)
+%         return ;
+%     end
+%  I comment this because this does not allow change of hex
+%    when other properties is set.
     
     binvec = obj.binvec;
     num = numel(binvec)/4;
