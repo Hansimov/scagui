@@ -1,6 +1,9 @@
 classdef Key < handle
 properties (SetObservable, AbortSet)
-    len     % 128, 192, 256
+    bitnum       % 128, 192, 256
+    initkeycol   %   4,   6,   8
+    roundnum     %  11,  13,  15
+    columnnum    %  44,  52,  60
     
     hexrow  % 128-bit: [1x32] char array
             %          '2b7e151628aed2a6abf7158809cf4f3c'
@@ -13,13 +16,19 @@ properties (SetObservable, AbortSet)
 %             % 192-bit: [4x6] or [1x24] or ... chars(1x2) cell (Column-wise)
 %             % 256-bit: [4x8] or [1x32] or ... chars(1x2) cell (Column-wise)
 %     
-%     norm    % 128-bit: [4x4] Byte cell
-%             % 192-bit: [4x6] Byte cell
-%             % 256-bit: [4x8] Byte cell
-%             
-    round   % 128-bit: [1x11] State cell
-            % 192-bit: [1x13] State cell
-            % 256-bit: [1x15] State cell
+    norm    % 128-bit: [4x4] Byte cell
+            % 192-bit: [4x6] Byte cell
+            % 256-bit: [4x8] Byte cell
+            
+    columns  % (Expanded)
+             % 128-bit: [1x44] KeyColumn cell
+             % 192-bit: [1x52] KeyColumn cell
+             % 256-bit: [1x60] KeyColumn cell    
+    rounds   % (Expanded)
+             % 128-bit: [1x11] State cell
+             % 192-bit: [1x13] State cell
+             % 256-bit: [1x15] State cell
+
 end
 
 methods
@@ -32,12 +41,11 @@ methods
         
         changedProp = obj.initialize(keyin);
         obj.typeConversion(changedProp);
-        obj.keyExpansion;
         obj.addListeners;
         
     end
     
-    function initialize(obj,keyin)
+    function changedProp = initialize(obj,keyin)
         if isa(keyin,'char')
             keysize = size(keyin,2);
             if keysize == 32 || keysize == 48 || keysize == 64
@@ -61,13 +69,35 @@ methods
             return ;
         end
         
-        if strcmp('changedProp','hexrow')
-            obj.len = numel(obj.hexrow);
+        if strcmp(changedProp,'hexrow')
+            obj.bitnum = 4*numel(obj.hexrow);
+            obj.initkeycol = obj.bitnum/32;
+            obj.roundnum = obj.initkeycol + 7;
+            obj.columnnum = 4*obj.roundnum;
+            obj.hexrow2norm;
+            [obj.columns, obj.rounds] = obj.keyExpansion;
         end
+    end
+    
+    function addListeners(obj)
+        addlistener(obj,'hexrow','PostSet',@obj.typeConversion);
     end
 end
 
+methods
+    function hexrow2norm(obj)
+        normcell = cell(4,obj.bitnum/32);
+        for i = 1:numel(normcell)
+           byte = obj.hexrow(1,2*i-1:2*i);
+           normcell{i} = aes.Byte(byte);
+        end
+        obj.norm = normcell;
+    end
+end
 
+methods
+   [columns, rounds] = keyExpansion(obj);
+end
 
 
 end

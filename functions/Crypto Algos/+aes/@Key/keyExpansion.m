@@ -1,4 +1,4 @@
-function [ output_args ] = keyExpansion( input_args )
+function [keycolumns, keyrounds ] = keyExpansion(obj)
 % Refer to these: 
 %   "Announcing the ADVANCED ENCRYPTION STANDARD (AES)": Appendix A -- Key Expansion Examples
 %      http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf
@@ -14,10 +14,6 @@ function [ output_args ] = keyExpansion( input_args )
 %   "How does the key schedule of Rijndael looks for keysizes other than 128 bit?"
 %      https://crypto.stackexchange.com/questions/2486/how-does-the-key-schedule-of-rijndael-looks-for-keysizes-other-than-128-bit/2496#2496
 %
-
-
-
-
 
 % Nb: the number of columns in the state
 % Nk: the number of columns of the cipher key
@@ -114,6 +110,44 @@ function [ output_args ] = keyExpansion( input_args )
 %  'AB','4D'  % round = 14
 % }
 % Rcon = {RC{i}; '00'; '00'; '00'}
+
+    keycolumns = cell(1, obj.columnnum);
+    keyrounds = cell(1,obj.roundnum);
+    const = aes.Constant;
+    rc = const.rc;
+    
+    if obj.bitnum == 128
+        for i = 1:obj.columnnum
+            keycolumns{i} = aes.KeyColumn;
+        end
+        for i = 1:obj.initkeycol
+            keycolumns{i}.col = obj.norm(1:4,i);
+        end
+
+        for i = obj.initkeycol+1 : obj.columnnum
+            if mod(i-1,obj.initkeycol) == 0
+                current_round = floor(i/obj.initkeycol);
+                tmp_keycol = keycolumns{i-1}.rotateColumn;
+                tmp_keycol = tmp_keycol.subBytes;
+                tmp_keycol = xor(tmp_keycol,rc{current_round});
+                keycolumns{i} = xor(tmp_keycol,keycolumns{i-obj.initkeycol});
+            else
+                keycolumns{i} = xor(keycolumns{i-1},keycolumns{i-obj.initkeycol});
+            end
+        end
+        
+        for i = 1:obj.roundnum
+            tmp_keyrnd = [ keycolumns{4*i-3}.col ...
+                           keycolumns{4*i-2}.col ...
+                           keycolumns{4*i-1}.col ...
+                           keycolumns{4*i-0}.col  ];
+           keyrounds{i} = aes.State(tmp_keyrnd);
+        end
+        
+        
+    else
+        disp('Invalid bits of cipher key!');
+    end
 
 
 end

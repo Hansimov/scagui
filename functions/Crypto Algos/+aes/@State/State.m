@@ -62,14 +62,19 @@ methods
             end
         elseif isa(statein,'cell')
             if isequal(size(statein),[4 4])
-                obj.hexmat = statein;
-                changedProp = 'hexmat';
+                if isa(statein{1},'aes.Byte')
+                    obj.norm = statein;
+                    changedProp = 'norm';
+                elseif isa(statein{1},'char')
+                    obj.hexmat = statein;
+                    changedProp = 'hexmat';
+                end
             else
                 disp('Invalid size of cells!');
             end
         elseif isa(statein,'aes.State')
             obj.norm = statein.norm;
-             changedProp = 'norm';
+            changedProp = 'norm';
         else
             disp('Invalid type of inputs!')
         end
