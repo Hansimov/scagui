@@ -35,10 +35,11 @@ methods
     function objnew = subBytes(obj)
         objnew = aes.KeyColumn();
         const = aes.Constant;
-        sbox_transposed = (const.sbox)';
+        sbox_tran = (const.sbox)';
         colcell = cell(4,1);
         for i = 1:4
-            byte_sub = sbox_transposed{obj.col{i}.dec+1};
+%             byte_sub = sbox_tran{obj.col{i}.dec+1};
+            byte_sub = sbox_tran{hex2dec(obj.col{i}.hex)+1};
             colcell{i} = aes.Byte(byte_sub);
         end
         objnew.col = colcell;

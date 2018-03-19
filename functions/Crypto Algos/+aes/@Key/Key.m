@@ -2,7 +2,7 @@ classdef Key < handle
 properties (SetObservable, AbortSet)
     bitnum       % 128, 192, 256
     initkeycol   %   4,   6,   8
-    roundnum     %  11,  13,  15
+    roundnum     %  10,  12,  14
     columnnum    %  44,  52,  60
     
     hexrow  % 128-bit: [1x32] char array
@@ -44,44 +44,12 @@ methods
         obj.addListeners;
         
     end
-    
-    function changedProp = initialize(obj,keyin)
-        if isa(keyin,'char')
-            keysize = size(keyin,2);
-            if keysize == 32 || keysize == 48 || keysize == 64
-                obj.hexrow = keyin;
-                changedProp = 'hexrow';
-            else
-                disp('Invalid size of characters!');
-            end
-%         elseif isa(keyin,'cell')
-%         elseif isa(keyin,'aes.Key')
-        end
-    end
-    
-    function typeConversion(obj,varargin)
-        if numel(varargin) == 1     % changedProp
-            changedProp = varargin{1};
-        elseif numel(varargin) == 2 % src, data
-            changedProp = varargin{1}.Name;
-        else
-            disp('Invalid size of inputs!');
-            return ;
-        end
-        
-        if strcmp(changedProp,'hexrow')
-            obj.bitnum = 4*numel(obj.hexrow);
-            obj.initkeycol = obj.bitnum/32;
-            obj.roundnum = obj.initkeycol + 7;
-            obj.columnnum = 4*obj.roundnum;
-            obj.hexrow2norm;
-            [obj.columns, obj.rounds] = obj.keyExpansion;
-        end
-    end
-    
-    function addListeners(obj)
-        addlistener(obj,'hexrow','PostSet',@obj.typeConversion);
-    end
+
+end
+methods
+    changedProp = initialize(obj,keyin);
+    typeConversion(obj,varargin);
+    addListeners(obj);
 end
 
 methods

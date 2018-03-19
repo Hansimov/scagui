@@ -34,7 +34,9 @@ Developed by: Hansimov
 		* Arbitary inter values
 	* Interact with HTML
 		* HTTP
-
+* Performances
+	* hex2dec is slow. To use mex.
+		
 * Documents
 	* Installation
 	* Usage

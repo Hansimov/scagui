@@ -51,64 +51,13 @@ methods
         obj.typeConversion(changedProp);
         obj.addListeners;
     end
-    
-    function changedProp = initialize(obj,statein)
-        if isa(statein,'char')
-            if isequal(size(statein),[1 32])
-                obj.hexrow = statein;
-                changedProp = 'hexrow';
-            else
-                disp('Invalied size of characters!')
-            end
-        elseif isa(statein,'cell')
-            if isequal(size(statein),[4 4])
-                if isa(statein{1},'aes.Byte')
-                    obj.norm = statein;
-                    changedProp = 'norm';
-                elseif isa(statein{1},'char')
-                    obj.hexmat = statein;
-                    changedProp = 'hexmat';
-                end
-            else
-                disp('Invalid size of cells!');
-            end
-        elseif isa(statein,'aes.State')
-            obj.norm = statein.norm;
-            changedProp = 'norm';
-        else
-            disp('Invalid type of inputs!')
-        end
-    end
-    
-    function typeConversion(obj,varargin)
-        if numel(varargin) == 1     % changedProp
-            changedProp = varargin{1};
-        elseif numel(varargin) == 2 % src, data
-            changedProp = varargin{1}.Name;
-        else
-            disp('Invalid size of inputs!');
-            return ;
-        end
-        
-        if strcmp(changedProp, 'norm')
-            obj.norm2hexrow;
-            obj.norm2hexmat;
-        elseif strcmp(changedProp, 'hexrow')
-            obj.hexrow2norm;
-            obj.norm2hexmat;
-        elseif strcmp(changedProp, 'hexmat')
-            obj.hexmat2norm;
-            obj.norm2hexrow;
-        end
-    end
-    
-    
-    function addListeners(obj)
-        addlistener(obj,'norm','PostSet',@obj.typeConversion);
-        addlistener(obj,'hexrow','PostSet',@obj.typeConversion);
-        addlistener(obj,'hexmat','PostSet',@obj.typeConversion);
-    end
 
+end
+
+methods
+   changedProp = initialize(obj,statein); 
+   typeConversion(obj,varargin);
+   addListeners(obj);
 end
 
 methods

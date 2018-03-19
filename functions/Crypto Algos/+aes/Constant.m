@@ -3,7 +3,7 @@ classdef Constant < handle
 properties
     sbox    % [16x16]    char cell - used in subBytes
     mbox    % [ 4x 4]  double cell - used in mixColumns
-    rc      % [ 4x 7]    char cell - used in keyExpansion
+    rc      % [ 1x ?]    char cell - used in keyExpansion
     
 end
 
@@ -48,10 +48,10 @@ methods
     
     function setRc(obj)
         obj.rc = { % Round Constants
-            '01','02','04','08','10','20','40';
-            '00','00','00','00','00','00','00';
-            '00','00','00','00','00','00','00';
-            '00','00','00','00','00','00','00'
+            '01','02','04','08','10','20','40','80', ...
+            '1B','36', ... % round = 10
+            '6C','D8', ... % round = 12
+            'AB','4D'  ... % round = 14
             };
     end
 end

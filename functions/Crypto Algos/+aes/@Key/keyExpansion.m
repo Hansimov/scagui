@@ -112,7 +112,7 @@ function [keycolumns, keyrounds ] = keyExpansion(obj)
 % Rcon = {RC{i}; '00'; '00'; '00'}
 
     keycolumns = cell(1, obj.columnnum);
-    keyrounds = cell(1,obj.roundnum);
+    keyrounds = cell(1,obj.roundnum+1);
     const = aes.Constant;
     rc = const.rc;
     
@@ -136,7 +136,7 @@ function [keycolumns, keyrounds ] = keyExpansion(obj)
             end
         end
         
-        for i = 1:obj.roundnum
+        for i = 1:obj.roundnum+1
             tmp_keyrnd = [ keycolumns{4*i-3}.col ...
                            keycolumns{4*i-2}.col ...
                            keycolumns{4*i-1}.col ...

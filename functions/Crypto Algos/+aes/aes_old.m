@@ -6,7 +6,7 @@
 % Trace Name:         Z1Trace00000.trc.bz2
 
 %% AES
-function AES()
+function aes_old()
 tic
 AES_256_Test()
 toc
