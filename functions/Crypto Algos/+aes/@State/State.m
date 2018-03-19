@@ -5,9 +5,9 @@ properties (SetObservable, AbortSet)
     hexrow  % [1x32] char array (No space, here I add spaces just to make it clear.)
             %        '448ff4f8eae2cea393553e15fd00eca1'
             %        '44 8f f4 f8  ea e2 ce a3  93 55 3e 15  fd 00 ec a1'
-    hexmat  % [4x4] [1x16] ... chars(1x2) cell (Column-wise, do not forget this!): 
+    hexmat  % [4x4] or [1x16] or ...  chars(1x2) cell (Column-wise, do not forget this!): 
             %        {'44', 'ea', '93','fd'; '8f','e2', ...}
-%     binstr  % [4x4] [1x16] ... chars(1x8) cell
+%     binstr  % [4x4] or [1x16] or ...  chars(1x8) cell
 %             %        {'01000100','11101010', ... }
 %     binvec  % [4x4] [1x16] ... double array(1x8) cell
 %             %        {[1 0 1 0 0 0 0 1], [1 1 1 0 1 0 1 0], ...}

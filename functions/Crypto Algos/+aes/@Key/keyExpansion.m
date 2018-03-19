@@ -16,36 +16,8 @@ function [ output_args ] = keyExpansion( input_args )
 %
 
 
-% The key expansion works in a way that 
-%   K(i) only depends directly on K(i?1) and k(i?Nk) 
-%     (where Nk is the number of columns in the key, i.e. 4 for AES-128).
-% In most cases it is a simple ?, 
-%   but after each Nk key columns, a non-linear function 'fi' is applied.
-% The functions 'fi' are nonlinear functions build from 
-%   the AES S-box (applied on each byte separately), 
-%   a rotation by one byte,
-%   and an XOR with a Round Constant depending on i 
-%     (this is the element of GF(2^8) corresponding to x^(i?1), 
-%      but there also is a table in the standard).
-% For AES-128
-%   the key selection algorithm simply takes k0¡­k3 as the first round key,
-%   k4¡­k7 as the second one, until k40¡­k43 as the last one. 
-%
-% AES-192 looks almost the same, 
-%   but with 6 columns in parallel.
-% As we need 13 round keys (=52 key columns), 
-%   this will be done until k51 (i.e. 8 full rows and 4 keys in the 9th row).
-%
-% For AES-256 (and all variants of Rijndael with more than 192 bits of key),
-%   there is an additional non-linear transformation after the 4th column:
-%
-% ---------- AES-256 ---------- %
-% Nb = 4;                  % Nb: Block Columns = (Block Bits)/32
-% Nk = 8;                  % Nk: Cipher Key Size
-% Nr = 14;                 % Nr: Round Number
-% K = cipher_key;          % K : Cipher Key     Nb x Nk     = 4 x 8
-% W = cell(Nb,Nb*(Nr+1));  % W : Expanded Key   Nb x (Nr+1) = 4 x 15
-% ----------------------------- %
+
+
 
 % Nb: the number of columns in the state
 % Nk: the number of columns of the cipher key
@@ -58,13 +30,13 @@ function [ output_args ] = keyExpansion( input_args )
 % Nr = 14 for 256-bit keys (Nk = 8)
 
 
-% --------------------------------------------------------------
-%   BitNum    BlockColumn(Nb)   CipherKeyColumn(Nk)   RoundNum(Nr)
-% --------------------------------------------------------------
-%     128         4                4                 10
-%     192         4                6                 12
-%     256         4                8                 14
-% --------------------------------------------------------------
+% ---------------------------------------------------------------------------
+%   Bit Num   |  Block Column (Nb) |  Key Column (Nk)  | Round Num (Nr)   
+% ---------------------------------------------------------------------------
+%     128     |          4         |        4          |       10
+%     192     |          4         |        6          |       12
+%     256     |          4         |        8          |       14
+% ---------------------------------------------------------------------------
 %
 % During the key expansion,
 %   the cipher key is expanded into an expanded key array, 
@@ -72,6 +44,20 @@ function [ output_args ] = keyExpansion( input_args )
 % This array is here denoted by W[4][Nb*(Nr+1)]. 
 % The round key of the i-th round, ExpandedKey[i],
 %   is given by the columns Nb*i to Nb*(i+1)-1 of W.
+
+% The key expansion works in a way that 
+%   K(i) only depends directly on K(i-1) and k(i-Nk) 
+%     (where Nk is the number of columns in the key, i.e. 4 for AES-128).
+% In most cases it is a simple xor, 
+%   but after each Nk key columns, a non-linear function 'Fi' is applied.
+% The functions 'Fi' are nonlinear functions build from 
+%   the AES S-box (applied on each byte separately), 
+%   a rotation by one byte,
+%   and an XOR with a Round Constant depending on i 
+%     (this is the element of GF(2^8) corresponding to x^(i?1), 
+%      but there also is a table in the standard).
+
+
 
 % The key expansion function depends on the value of Nk: 
 %   there is aversion for Nk <= 6, shown in List 3.3, 
@@ -83,19 +69,52 @@ function [ output_args ] = keyExpansion( input_args )
 %   the bytes of the column Nk positions earlier,
 %   and round constants RC[j].
 
+% For AES-128
+%   the key selection algorithm simply takes k0~k3 as the first round key,
+%   k4¡­k7 as the second one, until k40¡­k43 as the last one. 
+%
+% AES-192 looks almost the same, 
+%   but with 6 columns in parallel.
+% As we need 13 round keys (=52 key columns), 
+%   this will be done until k51 (i.e. 8 full rows and 4 keys in the 9th row).
+%
+% For AES-256 (and all variants of Rijndael with more than 192 bits of key),
+%   there is an additional non-linear transformation 'G' after the 4th column:
+% 'G' is a simpler variant of 'Fi': 
+%   simply the application of the AES S-box on every byte of the K(i-1)
+%   (without the rotation or the round constant, thus without an index).
+%
+
 % The recursion function depends on the position of the column. 
 % If i is not a multiple of Nk, 
 %   column i is the bitwise XOR of columns i-Nk and column i-1. 
 % Otherwise, column i is the bitwise XOR of column i-Nk 
-%   and a nonlinear function of column i-1. 
+%   and a nonlinear function 'Fi' of column i-1. 
 % For cipher key length values Nk > 6, 
 %   this is also the case if i mod Nk = 4. 
+
+
 % The non-linear function is realized by means of 
-%   the application of Srd to the four bytes of the column, 
-%   an additional cyclic rotation of the bytes within the column 
-%   and the addition of a round constant (for elimination of symmetry).
-% The round constants are independent of Nk,
-%   and defined by a recursion rule in GF(2^8 ) :
+%   1. subBytes: substitute each byte of the column
+%   2. rotateColumn: move each byte of the column up one row
+%   3. xor RC: xor currnt round constant (for elimination of symmetry).
+%
+% The round constants (RC) are independent of Nk,
+%   and defined by a recursion rule in GF(2^8 ).
+% RC[1] = x^0 ('01')
+% RC[2] = x^1 ('02')
+% RC[j] = x * RC[j-1] = x^(j-1)  (j>2)
+%
+% RC[O] = '00' is never used
+% RC used in round i: 
+% {'01','02','04','08',
+%  '10','20','40','80',
+%  '1B','36', % round = 10
+%  '6C','D8', % round = 12
+%  'AB','4D'  % round = 14
+% }
+% Rcon = {RC{i}; '00'; '00'; '00'}
+
 
 end
 
