@@ -28,7 +28,6 @@ cipherkey = '000102030405060708090a0b0c0d0e0f';
 
 
 tic
-for i = 1:10
 state = aes.State(plaintext);
 key = aes.Key(cipherkey);
 roundkey = key.rounds;
@@ -45,7 +44,6 @@ end
 
 state.subBytes('old');
 state.shiftRows('old');
-state.addRoundKey(roundkey{roundnum+1},'old');
-end
+state.addRoundKey(roundkey{roundnum+1},'old')
 
 toc

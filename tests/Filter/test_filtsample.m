@@ -1,5 +1,5 @@
 
-% tf = TraceFile('F:/Sources/MATLAB/work/scagui/traces/usim_trs/usim.mat');
+tf = TraceFile('F:/Sources/MATLAB/work/scagui/traces/usim_trs/usim.mat');
 fig = figure;
 
 z = tf.trs_sample{4};

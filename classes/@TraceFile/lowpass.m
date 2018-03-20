@@ -60,8 +60,14 @@ function freq_current = chooseFreqPass(obj)
     tx = xscale * (1:len);
     fx = fscale * (1:lenhalf)/len;
     
-    ax_time = subplot(2,1,1);
-    ax_freq = subplot(2,1,2);
+%     ax_time = subplot(2,1,1);
+%     ax_freq = subplot(2,1,2);
+    ax_time = axes(fig);
+    ax_freq = axes(fig);
+    
+    ax_time.Position = [0.15 0.58 0.8 0.4];
+    ax_freq.Position = [0.15 0.08 0.8 0.4];
+    
     ax_time.XLim = [tx(1) tx(end)];
     ax_freq.XLim = [fx(1) fx(end)];
 
