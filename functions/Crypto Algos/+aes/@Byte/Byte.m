@@ -74,7 +74,6 @@ methods
     end
     
     c = mul(a,num);
- 
 
 %    function c = nand(a,b)
 %    end
@@ -83,6 +82,12 @@ methods
 %    function c = xnor(a,b)
 %    end
 
+end
+
+methods
+    function hw = hammingWeight(obj)
+        hw = nnz(obj.binvec);
+    end
 end
     
 end
