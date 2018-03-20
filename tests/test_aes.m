@@ -42,7 +42,7 @@ for i = 1:roundnum-1
     state.addRoundKey(roundkey{i+1},'old');
 end
 
-state.subBytes('old');
+state = state.subBytes();
 state.shiftRows('old');
 state.addRoundKey(roundkey{roundnum+1},'old')
 

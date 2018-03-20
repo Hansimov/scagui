@@ -29,6 +29,7 @@ methods
         obj.fig.NumberTitle = 'off';
         obj.fig.Position = [1 1 1280 720];
         obj.fig.MenuBar = 'None';
+        obj.fig.ToolBar = 'figure';
         movegui(obj.fig,'center');
 %         obj.top.Renderer = 'painters';
     end
