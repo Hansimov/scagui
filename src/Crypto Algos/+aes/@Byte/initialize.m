@@ -2,7 +2,8 @@ function changedProp = initialize(obj, bytein)
     size_of_byte = size(bytein,2);
     if isa(bytein,'char')
         if size_of_byte == 2
-        % It is necessary to check the validity of inputs '0'-'f'('F')
+        % It is necessary to check the validity of inputs 
+        %   (limits to '0'-'f'('F'))
         %   but currently I do not have enough time to consider these side issues.
             obj.hex = upper(bytein);
             changedProp = 'hex';

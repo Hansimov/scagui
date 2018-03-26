@@ -85,8 +85,15 @@ methods
 end
 
 methods
-    function hw = hammingWeight(obj)
-        hw = nnz(obj.binvec);
+    function hamming_weight = hw(obj)
+        hamming_weight = nnz(obj.binvec);
+    end
+    function c = sub(a)
+        const = aes.Constant;
+        % MATLAB is column-wise
+        sbox_tran = (const.sbox)';
+        byte_sub = sbox_tran{hex2dec(a.hex)+1};
+        c = aes.Byte(byte_sub);
     end
 end
     
