@@ -1,6 +1,5 @@
 function aesAttack(obj,~,~)
-
-
+    chooseInterValuePosition(obj);
 end
 
 function createSettingWindow(obj)
@@ -62,7 +61,7 @@ function chooseInterValuePosition(obj)
     popup_algo.Position = [460 184 150 40];
 
     button_ok = uicontrol('Style', 'pushbutton', ...
-        'String', '确定');
+        'String', '确定','Callback',{@chooseAttackedPoints,obj});
     button_ok.Position = [600 40 60 30];
     button_cancel = uicontrol('Style','pushbutton',...
         'String', '取消');
@@ -70,7 +69,7 @@ function chooseInterValuePosition(obj)
     %%
 end
 
-function chooseAttackedPoints(obj)
+function chooseAttackedPoints(~,~,obj)
     %%
     import javax.swing.*
     pfig = PureFigure;
@@ -125,7 +124,7 @@ function chooseAttackedPoints(obj)
     mspinner_step.Position = [260 100 100 20];
 
     button_ok = uicontrol('Style', 'pushbutton', ...
-        'String', '确定');
+        'String', '确定','Callback',@(e,t)test_attack(obj));
     button_ok.Position = [600 40 60 30];
     button_cancel = uicontrol('Style','pushbutton',...
         'String', '取消');

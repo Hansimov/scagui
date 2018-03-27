@@ -63,7 +63,10 @@ methods
             menu.downsample.Separator = 'on';
             uimenu(ctmenu,'Label','低通','Callback',@obj.lowPass);
             uimenu(ctmenu,'Label','对齐','Callback',@obj.align);
-            menu.attack = uimenu(ctmenu,'Label','攻击','Callback',@obj.attack);
+            menu.attack = uimenu(ctmenu,'Label','攻击');
+            menu.attack_aes = uimenu(menu.attack,'Label','AES','Callback',@obj.aesAttack);
+            menu.attack_aes = uimenu(menu.attack,'Label','DES');
+            menu.attack_aes = uimenu(menu.attack,'Label','RSA');
 %             uimenu(menu.attack,'Label','AES');
             if strcmp(obj.ext,'')
                 menu.savetomat = uimenu(ctmenu,'Label','保存为 .mat 格式','Callback',@obj.saveToMat);
@@ -73,7 +76,7 @@ methods
         menu.delete = uimenu(ctmenu,'Label','删除对象','Callback',@deleteFile);
         menu.delete.ForegroundColor = 'red';
         menu.delete.Separator = 'on';
-        menu.delete.Checked = 'on';
+%         menu.delete.Checked = 'on';
     end
     
     function createStatus(obj)
@@ -112,6 +115,7 @@ methods
     downSample(obj,~,~)
     lowPass(obj,~,~)
     viewFreq(obj,~,~)
+    aesAttack(obj,~,~)
 
 % function deleteFile(~,~)
 %     global vars;

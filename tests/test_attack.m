@@ -1,4 +1,5 @@
 % KEY XOR OPc
+% 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16
 % AE 05 5C 88 C9 40 E6 3B 22 F1 42 32 D0 AE 89 DA
 % 
 % KEY
@@ -12,7 +13,7 @@
 % fclose(intervalfile)
 % delete('hal9000.m')
 
-% function test_attack() 
+% function test_attack(obj)
 %     import javax.swing.*
 
     % mf = matfile('F:\Sources\MATLAB\work\scagui\traces\usim_trs\usim_lowpass_align.mat');
@@ -31,50 +32,90 @@
 %     jsp.setValue(2);
 %     jsp.setValue(1);
 
-    trace_num = 50;
+    trace_num = 999;
+%     aesAttack(obj.trs_sample,obj.trs_data,trace_num);
     aesAttack(trs_sample,trs_data,trace_num);
 
-
 function aesAttack(trs_sample,trs_data,trace_num)
-    pfig = PureFigure;
-    fig  = pfig.m;
-    attacked_range = 10000:50:40000;
-    attacked_points = getAttackedPoints(trs_sample,attacked_range);
-    intervalue_matrix = zeros(trace_num,256,16);
-    box = uix.VBoxFlex('Parent',fig);
+    pfig_table = PureFigure;
+    fig_table  = pfig_table.m;
+    fig_table.MenuBar = 'figure';
+    fig_table.ToolBar = 'none';
+    
+%     pfig_plot = PureFigure;
+%     fig_plot = pfig_plot.m;
+%     fig_plot.MenuBar = 'figure';
+%     fig_plot.ToolBar = 'none';
+%     ax_plot = cell(1,16);
+%     for i = 1:16
+%         ax_plot{i} = subplot(4,4,i);
+%         for j = 1:256
+% %             line_plot{i,j} = line(ax_plot{i});            
+%             xdata{i,j} = [];
+%             ydata{i,j} = [];
+%         end
+%     end
+    
+    disp( '[*] Preprocessing original traces ...');
+%     attacked_range = 1:10:60000;
+%     attacked_points = getAttackedPoints(trs_sample,attacked_range);
+    load('inter_and_corr.mat'); % 'attacked_points','intervalue_matrix','correlation_mean'
+%     intervalue_matrix = zeros(trace_num,256,16);
+    box = uix.VBoxFlex('Parent',fig_table);
     guess_table = uitable(box,'Units','normalized','RowStriping','off',...
         'FontName','Consolas','ColumnWidth',num2cell(80*ones(1,16)));
+%     correlation_mean = cell(trace_num,1);
     for trace_index = 1:trace_num
         disp(['[*] Processing trace : ',num2str(trace_index,'%05d')]);
         disp( '    [*] Computing inter value ...');
-        intervalue_matrix(trace_index,:,:) = getInterValueOfTrace(trs_data, trace_index);
+%         intervalue_matrix(trace_index,:,:) = getInterValueOfTrace(trs_data, trace_index);
         disp( '    [*] Computing correlation ...');
-        correlation_matrix = getCorrelationOfTrace(attacked_points,intervalue_matrix,trace_index);
-        correlation_mean = getMeanOfCorrelation(correlation_matrix);
+%         correlation_matrix = getCorrelationOfTrace(attacked_points,intervalue_matrix,trace_index);
+%         correlation_mean{trace_index} = getMeanOfCorrelation(correlation_matrix); % 256x16
         disp( '    [*] Sorting correlation ...');
-        [max_corr, max_index] = max(correlation_mean,[],1); % 1x16, 1x16
-        [sort_corr, sort_index] = sort(correlation_mean,1,'descend'); % 256X16, 256X16
+        [max_corr, max_index] = max(correlation_mean{trace_index},[],1); % 1x16, 1x16
+        [sort_corr, sort_index] = sort(correlation_mean{trace_index},1,'descend'); % 256x16, 256x16
         disp( '    [*] Creating guessed key table ...');
         key_corr_cell = joinKeyAndCorr(sort_corr, sort_index);
         guess_table.Data = key_corr_cell;
 %         plot(16subplot)
+        fig_table.Name = num2str(trace_index,'%05d');
         drawnow
+%         plotRank(ax_plot, xdata,ydata, sort_corr, sort_index,trace_index);
         % heatmap
     end
 
+%     save('inter_and_corr.mat','attacked_points','intervalue_matrix','correlation_mean','-v7.3')
+
 end
 
-function updatePlot(src,~,ax,trs_sample,trs_data)
-    num = src.getValue;
-    plot(ax,trs_sample{num});
-    data_text = text(ax);
-    data_text.Units = 'normalized';
-    data_text.Position = [0.5 1.05];
-    data_text.HorizontalAlignment = 'center';
-    data_text.FontName = 'YaHei Consolas Hybrid';
-    data_text.FontSize = 12;
-    data_text.String = trs_data{num};
-end
+
+% function plotRank(ax_plot, xdata,ydata, sort_corr, sort_index,trace_index)
+% % sort_corr: 256x16
+% % sort_index: 256x16
+%     for i = 1:16
+%         for j = 1:256
+%             xdata{i,j}(end+1) = trace_index;
+%             ydata{i,j}(end+1) = sort_corr(j,i);
+% %             line_plot{i,j}.XData = xdata{i,j};
+% %             line_plot{i,j}.YData = ydata{i,j};
+%             plot(ax_plot{i},xdata{i,j},ydata{i,j});
+%             hold on
+%         end
+%     end
+% end
+
+% function updatePlot(src,~,ax,trs_sample,trs_data)
+%     num = src.getValue;
+%     plot(ax,trs_sample{num});
+%     data_text = text(ax);
+%     data_text.Units = 'normalized';
+%     data_text.Position = [0.5 1.05];
+%     data_text.HorizontalAlignment = 'center';
+%     data_text.FontName = 'YaHei Consolas Hybrid'; % This font is not existent!
+%     data_text.FontSize = 12;
+%     data_text.String = trs_data{num};
+% end
 
 
 function byteout = getInterValueOfOneByte(bytein, key_guess)
@@ -87,9 +128,9 @@ function intervalue_matrix_2d = getInterValueOfTrace(trs_data,trace_index)
     intervalue_matrix_2d = zeros(256,16);
     plaintext = trs_data{trace_index};
     state = aes.State(plaintext);
-    for key_index = 1:256
+    for key_index = 1:256 % To Improve: use hex directly!
         key_guess = dec2hex(key_index-1,2);
-        key_guess = aes.Byte(key_guess);
+        key_guess = aes.Byte(key_guess); 
         for byte_index = 1:16
             byte = state.norm{byte_index};
             byte = getInterValueOfOneByte(byte,key_guess);
@@ -122,7 +163,7 @@ function correlation_mean = getMeanOfCorrelation(correlation_matrix)
 %         [sort_corr,~] = sort(correlation_matrix_current, 2, 'descend');
 %         correlation_matrix_valuable = sort_corr(:,1:50); % 256x50
         % The 'sort' takes a lot of time, so I write the 'getMaxN' by myself.
-        correlation_matrix_valuable = getMaxK(correlation_matrix_current,20,'row'); % 256x20
+        correlation_matrix_valuable = getMaxK(correlation_matrix_current,10,'row'); % 256x20
 
         % Mean each row
         correlation_mean(:,:,byte_index) = mean(correlation_matrix_valuable,2); % 256x1
@@ -131,30 +172,30 @@ function correlation_mean = getMeanOfCorrelation(correlation_matrix)
 end
 
 
-function key_max = getMaxKey(max_index)
-    key_max = cell(1,16);
-    for byte_index = 1:16
-        key_max{byte_index} = dec2hex(max_index(byte_index)-1,2);
-    end
-end
-
-function key_sort = getSortKey(sort_index)
-    key_sort = cell(256,16);
-    for key_index = 1:256
-        for byte_index = 1:16
-            key_sort{byte_index} = dec2hex(sort_index(key_index,byte_index)-1,2);
-        end
-    end
-end
+% function key_max = getMaxKey(max_index)
+%     key_max = cell(1,16);
+%     for byte_index = 1:16
+%         key_max{byte_index} = dec2hex(max_index(byte_index)-1,2);
+%     end
+% end
+% 
+% function key_sort = getSortKey(sort_index)
+%     key_sort = cell(256,16);
+%     for key_index = 1:256
+%         for byte_index = 1:16
+%             key_sort{byte_index} = dec2hex(sort_index(key_index,byte_index)-1,2);
+%         end
+%     end
+% end
 
 function key_corr_cell = joinKeyAndCorr(sort_corr, sort_index)
     key_corr_cell = cell(256,16);
 %     sort_corr=round(sort_corr,4);
     for i = 1:256*16
-        key_hex = dec2hex(sort_index(i)-1,2);
+        key_hex = xdec2hex(sort_index(i)-1);
         try
-            green_scale = dec2hex(floor((sort_corr(i))*255),2);
-            red_scale   = dec2hex(floor((1-sort_corr(i))*255),2);
+            green_scale = xdec2hex(floor((sort_corr(i))*255));
+            red_scale   = xdec2hex(floor((1-sort_corr(i))*255));
         catch
             green_scale = '00';
             red_scale = '00';
@@ -202,7 +243,7 @@ end
 % end
 
 
-
+% end
 
 
 
