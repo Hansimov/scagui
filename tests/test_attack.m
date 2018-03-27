@@ -32,7 +32,7 @@
 %     jsp.setValue(2);
 %     jsp.setValue(1);
 
-    trace_num = 999;
+    trace_num = 99;
 %     aesAttack(obj.trs_sample,obj.trs_data,trace_num);
     aesAttack(trs_sample,trs_data,trace_num);
 
