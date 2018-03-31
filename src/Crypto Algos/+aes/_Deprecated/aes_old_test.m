@@ -113,7 +113,7 @@ function index = isMemberS(bin_vec)
 global bin_table;
 index = 1*bin_vec(1) + 2*bin_vec(2) + 4*bin_vec(3) + 8*bin_vec(4);
 end
-end
+
 
 %% AddRoundKey
 function state_out = AddRoundKey(state_in,key_in)

@@ -22,8 +22,8 @@ Developed by: Hansimov
 	* Remember users' configurations:
 		* Layouts
 		* Languages
-	* LowPass
-		* Preview
+	* [x] LowPass
+		* [x] Preview
 	* Downsample
 		* Specify number or range of traces
 		* 

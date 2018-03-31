@@ -1,0 +1,27 @@
+<productinfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="optional">
+    <?xml-stylesheet type="text/xsl"href="optional"?>
+    <!-- info.xml file for the Side-Channel Analysis Toolbox -->
+    <!-- Version 0.1 -->
+    <!-- Copyright (2018.03) (zehan.yu).-->
+    <!-- Contact me: zehan.yu@viewsources.com -->
+    
+    <!-- Supply the following six elements in the order specified -->
+    <!-- (Required) element; matlabrelease content is not currently used -->
+    <matlabrelease>R2016b</matlabrelease>
+    <!-- (Required) The name element appears in the Contents pane -->
+    <name>Side-Channel Analysis Toolbox</name>
+    <!-- (Required) The type elementidentifies your package; pick one: -->
+    <!-- matlab, toolbox, simulink, blockset, links_targets  -->
+    <type>toolbox</type>
+    <!-- (Not used) Icon fiel to display in the Start button. Element is -->
+    <!-- required to parse the file -->
+    <icon></icon>
+    <!-- (Required if you supply help) relative path to help (HTML) folder -->
+    <help_location>../sca</help_location>
+    <!-- (Required if you supply help) icon used in the Help browser TOC -->
+    <!-- Ignored in R2015a and later -->
+    <help_contents_icon></help_contents_icon>
+
+
+</productinfo>
