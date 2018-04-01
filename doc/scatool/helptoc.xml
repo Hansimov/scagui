@@ -2,8 +2,17 @@
 <toc version="2.0">
     <tocitem target="./html/Start.html" image="">
         旁路分析工具箱
-        <tocitem target="./html/Installation.html" image="">
+        <tocitem target="./html/doc_01_installation.html" image="">
             安装与卸载
+        </tocitem>
+        <tocitem target="./html/doc_02_gui.html" image="">
+            图形用户界面
+        </tocitem>
+        <tocitem target="./html/doc_03_lib.html" image="">
+            常用函数和模块
+        </tocitem>
+        <tocitem target="./html/doc_04_support.html" image="">
+            反馈和帮助
         </tocitem>
     </tocitem>
 </toc>

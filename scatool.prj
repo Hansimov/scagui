@@ -44,14 +44,28 @@ README.md
 .git
 .gitignore
 **/_Deprecated
-**/*.pdf
-demos.xml</param.exclude.filters>
+**/*.pdf</param.exclude.filters>
     <param.examples>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;examples&gt;
    &lt;exampleCategory name="scatool"&gt;
-      &lt;example name="Installation" type="html"&gt;
-         &lt;file type="source"&gt;/doc/scatool/html/Installation.html&lt;/file&gt;
-         &lt;file type="main"&gt;/doc/scatool/Installation.m&lt;/file&gt;
+      &lt;example name="doc_01_installation" type="html"&gt;
+         &lt;file type="source"&gt;/doc/scatool/html/doc_01_installation.html&lt;/file&gt;
+         &lt;file type="main"&gt;/doc/scatool/doc_01_installation.m&lt;/file&gt;
+         &lt;file type="thumbnail"/&gt;
+      &lt;/example&gt;
+      &lt;example name="doc_02_gui" type="html"&gt;
+         &lt;file type="source"&gt;/doc/scatool/html/doc_02_gui.html&lt;/file&gt;
+         &lt;file type="main"&gt;/doc/scatool/doc_02_gui.m&lt;/file&gt;
+         &lt;file type="thumbnail"/&gt;
+      &lt;/example&gt;
+      &lt;example name="doc_03_lib" type="html"&gt;
+         &lt;file type="source"&gt;/doc/scatool/html/doc_03_lib.html&lt;/file&gt;
+         &lt;file type="main"&gt;/doc/scatool/doc_03_lib.m&lt;/file&gt;
+         &lt;file type="thumbnail"/&gt;
+      &lt;/example&gt;
+      &lt;example name="doc_04_support" type="html"&gt;
+         &lt;file type="source"&gt;/doc/scatool/html/doc_04_support.html&lt;/file&gt;
+         &lt;file type="main"&gt;/doc/scatool/doc_04_support.m&lt;/file&gt;
          &lt;file type="thumbnail"/&gt;
       &lt;/example&gt;
    &lt;/exampleCategory&gt;
@@ -79,6 +93,7 @@ demos.xml</param.exclude.filters>
       <file>F:\Sources\MATLAB\work\scatool</file>
     </fileset.rootdir>
     <fileset.rootfiles>
+      <file>${PROJECT_ROOT}\demos.xml</file>
       <file>${PROJECT_ROOT}\doc</file>
       <file>${PROJECT_ROOT}\scamaster.m</file>
       <file>${PROJECT_ROOT}\src</file>

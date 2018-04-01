@@ -62,12 +62,12 @@ function freq_current = chooseFreqPass(obj)
     tx = xscale * (1:len);
     fx = fscale * (1:lenhalf)/len;
     
-    ax_time = subplot(2,1,1);
-    ax_freq = subplot(2,1,2);
-%     ax_time = axes(fig);
-%     ax_freq = axes(fig);
-%     ax_time.Position = [0.15 0.58 0.8 0.4];
-%     ax_freq.Position = [0.15 0.08 0.8 0.4];
+%     ax_time = subplot(2,1,1);
+%     ax_freq = subplot(2,1,2);
+    ax_time = axes(fig);
+    ax_freq = axes(fig);
+    ax_time.Position = [0.05 0.58 0.7 0.4];
+    ax_freq.Position = [0.05 0.08 0.7 0.4];
     
     ax_time.XLim = [tx(1) tx(end)];
     ax_freq.XLim = [fx(1) fx(end)];
@@ -80,40 +80,54 @@ function freq_current = chooseFreqPass(obj)
     warning('off','MATLAB:modes:mode:InvalidPropertySet');
     fig.WindowButtonMotionFcn = @detectPointer;
     dragging = false;
-
+    
+    text_index = uicontrol('Style','text','String','曲线条数');
+    text_index.HorizontalAlignment = 'left';
+    text_index.Position = [0.78*fig.Position(3) 0.33*fig.Position(4) 120 30];
+    text_index.FontSize = 10;
+    
     spinner_index = JSpinner(SpinnerNumberModel(1,1,obj.trace_num,1));
     [~, mspinner_index] = javacomponent(spinner_index);
-    mspinner_index.Position = [30 60 60 30];
+    mspinner_index.Position = [0.88*fig.Position(3) 0.33*fig.Position(4)+10 100 24];
     set(spinner_index,'StateChangedCallback',@previewFilter);
+    
+    text_freq = uicontrol('Style','text','String','截止频率');
+    text_freq.HorizontalAlignment = 'left';
+    text_freq.Position = [0.78*fig.Position(3) 0.23*fig.Position(4) 120 30];
+    text_freq.FontSize = 10;
     
     spinner_freq = JSpinner(SpinnerNumberModel(freq_pass_init,0,fx(end),0.01));
     [~, mspinner_freq] = javacomponent(spinner_freq);
-    mspinner_freq.Position = [30 30 60 30];
+    mspinner_freq.Position = [0.88*fig.Position(3) 0.23*fig.Position(4)+10 100 24];
+    
     set(spinner_freq,'StateChangedCallback',@updateLinePostion);
     function updateLinePostion(~,~)
         x = spinner_freq.getValue;
         myline.XData = x * [1 1];
     end
 
-    btn_width = 80;
-    btn_height = 30;
-    fig_width = fig.Position(3);
-    fig_height = fig.Position(4);
-    btn_margin_left = 90;
-    btn_margin_bottom = 30;
+%     btn_width = 80;
+%     btn_height = 30;
+%     fig_width = fig.Position(3);
+%     fig_height = fig.Position(4);
+%     btn_margin_left = 90;
+%     btn_margin_bottom = 30;
     
     btn_ok = uicontrol('Style','pushbutton','String','确定');
-    btn_ok.Position = [btn_margin_left btn_margin_bottom btn_width btn_height];
+%     btn_ok.Position = [btn_margin_left btn_margin_bottom btn_width btn_height];
+    btn_ok.Position = [0.82*fig.Position(3) 0.06*fig.Position(4)+10 80 24];
     btn_ok.Callback = @buttonOk;
     btn_ok.FontSize = 10;
     
     btn_cancel = uicontrol('Style','togglebutton','String','取消');
-    btn_cancel.Position = [fig_width-btn_margin_left-btn_width btn_margin_bottom btn_width btn_height];
+%     btn_cancel.Position = [fig_width-btn_margin_left-btn_width btn_margin_bottom btn_width btn_height];
+    btn_cancel.Position = [0.92*fig.Position(3) 0.06*fig.Position(4)+10 80 24];
     btn_cancel.Callback = @buttonCancel;
     btn_cancel.FontSize = 10;
     
     btn_preview = uicontrol('Style','togglebutton','String','预览');
-    btn_preview.Position = [btn_margin_left btn_margin_bottom+40 btn_width btn_height];
+%     btn_preview.Position = [btn_margin_left btn_margin_bottom+40 btn_width btn_height];
+    btn_preview.Position = [0.82*fig.Position(3) 0.13*fig.Position(4)+10 80 24];
     btn_preview.Callback = @previewFilter;
     btn_preview.FontSize = 10;
 
