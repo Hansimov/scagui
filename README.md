@@ -1,6 +1,6 @@
 ## Introdutction
 
-GUI for Side-Channel Attack in MATLAB.
+Side-Channel Analysis Toolbox in MATLAB.
 
 Currently this project is under test.
 

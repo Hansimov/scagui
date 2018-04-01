@@ -1,0 +1,144 @@
+<deployment-project plugin="plugin.toolbox" plugin-version="1.0">
+  <configuration build-checksum="3730186525" file="F:\Sources\MATLAB\work\scatool\scatool.prj" location="F:\Sources\MATLAB\work\scatool" name="scatool" target="target.toolbox" target-name="Package Toolbox">
+    <param.appname>scatool</param.appname>
+    <param.authnamewatermark>Yu Zehan</param.authnamewatermark>
+    <param.email>zehan.yu@viewsources.com</param.email>
+    <param.company>View Sources</param.company>
+    <param.summary>Side-Channel Analysis Toolbox</param.summary>
+    <param.description>This tool box is designed to help beginners learn the ideas, methods and technolgies of side-channel analysis.
+We provide:
+(1) a graphical user interface – to visualize the process of analysis;
+(2) a library of commonly used functions – to make people design algorithms more easily.</param.description>
+    <param.screenshot />
+    <param.version>1.0</param.version>
+    <param.output>${PROJECT_ROOT}\scatool.mltbx</param.output>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.guid>243f5aaa-476c-42e0-9c6b-e7b0201e63c3</param.guid>
+    <param.exclude.filters>% List files contained in your toolbox folder that you would like to exclude
+% from packaging.  Excludes should be listed relative to the toolbox folder.
+% Some examples of how to specify excludes are provided below:
+%
+% A single file in the toolbox folder:
+% .svn
+%
+% A single file in a subfolder of the toolbox folder:
+% example/.svn
+%
+% All files in a subfolder of the toolbox folder:
+% example/*
+%
+% All files of a certain name in all subfolders of the toolbox folder:
+% **/.svn
+%
+% All files matching a pattern in all subfolders of the toolbox folder:
+% **/*.bak
+%
+%
+traces
+tests
+**/*.mat
+README.md
+.git
+.gitignore
+**/_Deprecated
+**/*.pdf
+demos.xml</param.exclude.filters>
+    <param.examples>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;examples&gt;
+   &lt;exampleCategory name="scatool"&gt;
+      &lt;example name="Installation" type="html"&gt;
+         &lt;file type="source"&gt;/doc/scatool/html/Installation.html&lt;/file&gt;
+         &lt;file type="main"&gt;/doc/scatool/Installation.m&lt;/file&gt;
+         &lt;file type="thumbnail"/&gt;
+      &lt;/example&gt;
+   &lt;/exampleCategory&gt;
+&lt;/examples&gt;</param.examples>
+    <param.demosxml />
+    <param.apps />
+    <param.docs>${PROJECT_ROOT}\doc\scatool\info.xml</param.docs>
+    <param.matlabpath.excludes />
+    <param.javaclasspath.excludes>
+      <item>/src/_Deprecated/createTable/TableSorter.jar</item>
+    </param.javaclasspath.excludes>
+    <unset>
+      <param.screenshot />
+      <param.version />
+      <param.output />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.demosxml />
+      <param.apps />
+      <param.matlabpath.excludes />
+    </unset>
+    <fileset.rootdir>
+      <file>F:\Sources\MATLAB\work\scatool</file>
+    </fileset.rootdir>
+    <fileset.rootfiles>
+      <file>${PROJECT_ROOT}\doc</file>
+      <file>${PROJECT_ROOT}\scamaster.m</file>
+      <file>${PROJECT_ROOT}\src</file>
+    </fileset.rootfiles>
+    <fileset.depfun.included />
+    <fileset.depfun.excluded />
+    <fileset.package />
+    <build-deliverables>
+      <file location="F:\Sources\MATLAB\work\scatool" name="scatool.mltbx" optional="false">F:\Sources\MATLAB\work\scatool\scatool.mltbx</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>D:\MATLAB R2017a</root>
+      <toolboxes>
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="polyspacebugfinder" />
+      </toolboxes>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <polyspacebugfinder>
+          <enabled>true</enabled>
+        </polyspacebugfinder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

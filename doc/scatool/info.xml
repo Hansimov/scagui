@@ -10,7 +10,7 @@
     <!-- (Required) element; matlabrelease content is not currently used -->
     <matlabrelease>R2016b</matlabrelease>
     <!-- (Required) The name element appears in the Contents pane -->
-    <name>Side-Channel Analysis Toolbox</name>
+    <name>Side-Channel Analysis</name>
     <!-- (Required) The type elementidentifies your package; pick one: -->
     <!-- matlab, toolbox, simulink, blockset, links_targets  -->
     <type>toolbox</type>
@@ -18,7 +18,7 @@
     <!-- required to parse the file -->
     <icon></icon>
     <!-- (Required if you supply help) relative path to help (HTML) folder -->
-    <help_location>../sca</help_location>
+    <help_location>../scatool</help_location>
     <!-- (Required if you supply help) icon used in the Help browser TOC -->
     <!-- Ignored in R2015a and later -->
     <help_contents_icon></help_contents_icon>
