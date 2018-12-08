@@ -8,7 +8,7 @@
     
     <!-- Supply the following six elements in the order specified -->
     <!-- (Required) element; matlabrelease content is not currently used -->
-    <matlabrelease>R2016b</matlabrelease>
+    <matlabrelease>R2017a</matlabrelease>
     <!-- (Required) The name element appears in the Contents pane -->
     <name>Side-Channel Analysis</name>
     <!-- (Required) The type elementidentifies your package; pick one: -->
